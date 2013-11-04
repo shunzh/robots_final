@@ -37,6 +37,57 @@
 	          using a Sony Aibo ERS-7 robot.
                  },
 	wwwnote={<a href="http://www.tandf.co.uk/journals/titles/09540091.asp">Connection Science Journal</a>. Contains material that was previously published in an <a href="http://www.cs.utexas.edu/~pstone/Papers/2005icra/actsense.pdf">ICRA-2005 paper</a>.},
-}	
+}
 
+@InProceedings{ICRA08-stronger,
+	author="Daniel Stronger and Peter Stone",
+	title="Maximum Likelihood Estimation of Sensor and Action Model Functions on a Mobile Robot",
+	booktitle="{IEEE} International Conference on Robotics and Automation",
+	location="Pasadena, CA",
+	month="May",
+	year="2008",
+	abstract="In order for a mobile robot to accurately interpret its sensations and
+		predict the effects of its actions, it must have accurate models of
+		its sensors and actuators.  These models are typically tuned manually,
+		a brittle and laborious process.  Autonomous model learning is a
+		promising alternative to manual calibration, but previous work has
+		assumed the presence of an accurate action or sensor model in order to
+		train the other model.  This paper presents an adaptation of the
+		Expectation-Maximization (EM) algorithm to enable a mobile robot to
+		learn both its action and sensor model functions, starting without an
+		accurate version of either.  The resulting algorithm is validated
+		experimentally both on a Sony Aibo ERS-7 robot and in simulation.",
+	wwwnote={<a href="http://www.icra2008.org/">ICRA 2008</a>},
+ }
 
+@incollection(LNAI2007-ahmadi,
+        author="Mazda Ahmadi and Peter Stone",
+        title="Instance-Based Action Models for Fast Action Planning",
+        booktitle= "{R}obo{C}up-2007: Robot Soccer World Cup {XI}",
+        Editor="Ubbo Visser and Fernando Ribeiro and Takeshi Ohashi and Frank Dellaert",
+        Publisher="Springer Verlag",address="Berlin",year="2008",
+        series="Lecture Notes in Artificial Intelligence",      
+	volume="5001",
+	pages="1--16",
+        abstract={
+                Two main challenges of robot action planning in real domains
+                are uncertain action effects and dynamic environments.
+                In this paper, an instance-based action model is learned empirically
+                by robots trying actions in the environment. Modeling the 
+                action planning problem as a Markov decision process, 
+                the action model is used to build the transition function. 
+                In static environments,
+                standard value iteration techniques are used for computing 
+                the optimal policy.  In dynamic environments, an algorithm is proposed
+                for fast replanning, which updates a subset of state-action values
+                computed for the static environment. As a test-bed, the 
+                goal scoring task in the RoboCup 4-legged scenario is used.
+                The algorithms are validated in the problem of planning
+                kicks for scoring goals in the presence of opponent robots.
+                The experimental results both in simulation
+                and on real robots show that the instance-based action model boosts
+                performance over using parametric models as done previously, and also
+                incremental replanning significantly improves over original off-line planning.
+        },
+        wwwnote={<b>BEST PAPER AWARD WINNER</b> at RoboCup International Symposium.<br>Official version from <a href="http://dx.doi.org/10.1007/978-3-540-68847-1_1">Publisher's Webpage</a>&copy Springer-Verlag},
+)
