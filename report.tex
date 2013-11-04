@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage{latexsym}
+\usepackage{qtree}
+\usepackage{algpseudocode}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\title{Action Selection in ASAMI}
+\author{Shun Zhang}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\sloppy
+\section{Literature Survey}
+
+Regarding the ASAMI paper \cite{CSJ06}, actions are selected randomly
+in the training. I don't know whether this is the authors' intention,
+but I think action selection can be biased according to the current
+belief.  In this sense, the agent should be able to determine which
+(state, action) pairs are uncertain and need more samples.
+
+However, the agent doesn't know the correctness of the models. It only
+knows the consistency of them. For example, states with larger
+difference in action model and sensor model ($|W_a - W_s|$) should be
+re-learned.  Unobserved states, even possibly predicted by the current
+model, should also have higher priorities to be visited.
+
+Ideally, this should make ASAMI more efficient.
+
+I think it's a good point that inconsistency can be caused by
+underfitting (then, by biasing the action selection, the performance
+would be like playing seesaw). This should be a problem in degree
+selection in the polynomial regression. Maybe for this class project,
+I'm not dealing with it. I'll check what the action model should be,
+and give our action model proper degrees of freedom. So if the action
+model is inconsistent, the reason should be either few data gathered
+to make consistency happen, or the data gathered are noisy and not
+making much sense.
+
+I agree that in one dimension, random actions can easily cover the
+whole action space. I can still check that with biasing the action
+selection, the performance should be able to bound the average
+performance of uniformly randomly choosing the actions. (I'm also
+curious about the performance of applying this in 2D, using RL
+framework if regarding inconsistency as rewards.  I'll see whether
+time permits.)
+
+%=====================================================================
+\bibliographystyle{abbrv}
+
+\bibliography{report}
+
+\end{document}
