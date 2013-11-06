@@ -18,49 +18,39 @@
 \sloppy
 \section{Literature Review}
 
-In developmental robotics literature, action model and sensor model
-are learned by the robots. 
-
-Regarding the ASAMI paper \cite{CSJ06}, actions are selected randomly
-in the training. I don't know whether this is the authors' intention,
-but I think action selection can be biased according to the current
-belief.  In this sense, the agent should be able to determine which
-(state, action) pairs are uncertain and need more samples.
-
-However, the agent doesn't know the correctness of the models. It only
+In \cite{CSJ06}, action model and sensor model are both autonomously
+learned by the robot in a bootstrapping way. Actions are selected
+randomly in the training. However, this can be biased according to the
+current belief.  In this sense, the agent should be able to determine
+which action leads to most uncertain results and need more samples.
+The agent doesn't know the correctness of the models. It only
 knows the consistency of them. For example, states with larger
 difference in action model and sensor model ($|W_a - W_s|$) should be
 re-learned.  Unobserved states, even possibly predicted by the current
 model, should also have higher priorities to be visited.
 
-Ideally, this should make ASAMI more efficient.
+The first author of \cite{CSJ06}, Dan Stronger commented that "an
+action could be causing problems is because the action model function
+being fit, with the degrees of freedom that it has, just fits to a
+function that's not especially accurate for that action".
 
-I think it's a good point that inconsistency can be caused by
-underfitting (then, by biasing the action selection, the performance
-would be like playing seesaw). This should be a problem in degree
-selection in the polynomial regression. Maybe for this class project,
-I'm not dealing with it. I'll check what the action model should be,
-and give our action model proper degrees of freedom. So if the action
+This would a problem in degree selection in the polynomial regression.
+Observed inconsistency can be caused by underfitting.  In this paper,
+I'll give our action model proper degrees of freedom. So if the action
 model is inconsistent, the reason should be either few data gathered
 to make consistency happen, or the data gathered are noisy and not
 making much sense.
 
-I agree that in one dimension, random actions can easily cover the
-whole action space. I can still check that with biasing the action
-selection, the performance should be able to bound the average
-performance of uniformly randomly choosing the actions. (I'm also
-curious about the performance of applying this in 2D, using RL
-framework if regarding inconsistency as rewards.  I'll see whether
-time permits.)
+Compared with this proposed method, some similar ideas are discussed
+in the developmental robotics literature. Action selection using
+Reinforcement Learning framework \cite{oudeyer2006discovering}
+\cite{schmidhuber2006developmental}.
+
 
 Two-dimensional ASAMI has been discussed in \cite{ICRA08-stronger}.
 
 an instance-based action model is learned empirically by robots trying
 actions in the environment \cite{LNAI2007-ahmadi}.
-
-The idea is discussed in the developmental robotics literature. Action
-selection using Reinforcement Learning framework
-\cite{oudeyer2006discovering} \cite{schmidhuber2006developmental}.
 
 %=====================================================================
 \bibliographystyle{abbrv}
