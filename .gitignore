@@ -59,3 +59,7 @@ nosetests.xml
 *.mtc1
 *.out
 *.pdf
+
+
+# others
+*.swp
