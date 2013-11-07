@@ -18,16 +18,16 @@
 \sloppy
 \section{Literature Review}
 
-\cite{CSJ06} described a way that action model and sensor model of a
-robot can be learned simultaneously without external feedback.  In
-their algorithm, called ASAMI, actions are selected randomly in the
+The action model and sensor model of a robot can be learned
+simultaneously without external feedback \cite{CSJ06}.  In the
+algorithm, called ASAMI, actions are selected randomly in the
 training. However, this can be biased according to the current belief.
 In this sense, the agent should be able to determine which action
 would lead to most uncertain results and thus need more samples.  The
 agent doesn't know the correctness of the models. It only knows the
 consistency of them. For example, states with larger difference in
 action model and sensor model ($|W_a - W_s|$) should be considered as
-inconsistent. Unobserved states can be also assumed as inconsistent.
+inconsistent.  Unobserved states can be also assumed as inconsistent.
 In the perspective of model-adaptive agents \cite{maes1993modeling},
 this tries to solve the problem of action selection.
 
@@ -56,21 +56,21 @@ in the developmental robotics literature. They call the inconsistency
 described above as \textit{error} \cite{oudeyer2006discovering},
 \textit{surprise} \cite{ranasinghe2008surprise} or \textit{curiosity}
 \cite{schmidhuber2006developmental}. This serves as a motivation to
-change the model. \cite{oudeyer2006discovering} uses a metric to
-describe the global inconsistency, and takes advantage of the
-reinforcement learning framework to plan to get to the states with the
+change the model. A metric can be used to describe the global
+inconsistency \cite{oudeyer2006discovering}. Then, a reinforcement
+learning framework can be used to plan to get to the states with the
 least global inconsistency. The authors in
 \cite{ranasinghe2008surprise} used logic rules as the model, and let
 the robot figure out why there could be a surprise. In this paper, I
 assume that the surprise is caused by insufficient or noisy data, and
 the knowledge is still the fitted functions. So the surprise, or
-inconsistency, at an action, is naively caused by the data gathered at
+inconsistency, of an action, is naively caused by the data gathered at
 that action.
 
 There is an assumption in \cite{CSJ06} that there is a mapping from
-action to the difference of state, i.e. $A \rightarrow \Delta S$. This
-is true in robot motion. So it's possible to learn the difference in
-the observation. This is exactly how the task is designed in
+action to the difference of state, i.e., $A \rightarrow \Delta S$.
+This is true in robot motion. So it's possible to learn the difference
+in the observation. This is exactly how the task is designed in
 \cite{ICDL10-hester}. If this is not true, so that $S \times A
 \rightarrow S$ is the best we can estimate, this would become more
 challenging but still possibly to be dealt with. We might know that a
