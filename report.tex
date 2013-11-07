@@ -18,31 +18,30 @@
 \sloppy
 \section{Literature Review}
 
-Authors of \cite{CSJ06} described a way that action model and sensor
-model of a robot can be learned without external feedback.  In their
-algorithm, called ASAMI, actions are selected randomly in the
+\cite{CSJ06} described a way that action model and sensor model of a
+robot can be learned simutaneously without external feedback.  In
+their algorithm, called ASAMI, actions are selected randomly in the
 training. However, this can be biased according to the current belief.
 In this sense, the agent should be able to determine which action
-would lead to most uncertain results and need more samples.  The agent
-doesn't know the correctness of the models. It only knows the
+would lead to most uncertain results and thus need more samples.  The
+agent doesn't know the correctness of the models. It only knows the
 consistency of them. For example, states with larger difference in
 action model and sensor model ($|W_a - W_s|$) should be considered as
 inconsistent. Unobserved states can be also assumed as inconsistent.
 
-The first author of \cite{CSJ06}, Dan Stronger, commented that ``One
+The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
 possible reason the $W_a$ is wrong after a certain action is that the
 action is just very noisy \ldots This is a good reason to gather more
-data for that action (the noisier something is, the more data you need
-to estimate its expected value accurately).  But another possible
-reason  an action could be causing problems is because the action
-model function being fit, with the degrees of freedom that it has,
-just fits to a function that's not especially accurate for that
-action''. This would a problem in degree selection in the polynomial
-regression, which is discussed in \cite{IJAIT08-stronger}. In this
-paper, I'll give our action model proper degrees of freedom. So if the
-action model is inconsistent, the reason should be either few data
-gathered to make consistency happen, or the data gathered are noisy
-and not making much sense.
+data for that action \ldots  But another possible reason  an action
+could be causing problems is because the action model function being
+fit, with the degrees of freedom that it has, just fits to a function
+that's not especially accurate for that action''. This would be a
+problem in degree selection in the polynomial regression, which is
+discussed in \cite{IJAIT08-stronger}. In this paper, I'll give our
+action model proper degrees of freedom. So, if the action model is
+inconsistent, the reason should be either few data gathered to make
+consistency happen, or the data gathered are noisy and not making much
+sense.
 
 There is a two-dimensional version of ASAMI discussed in
 \cite{ICRA08-stronger}.  As the action space is larger in higher
@@ -51,25 +50,29 @@ becomes more essential. This can be proceeded if this proposal works
 in one-dimensional environment.
 
 Compared with this proposed method, some similar ideas are discussed
-in the developmental robotics literature \cite{oudeyer2006discovering,
-schmidhuber2006developmental, ranasinghe2008surprise}. They call the
-inconsistency described above as \textit{error}
-\cite{oudeyer2006discovering} or \textit{surprise}
-\cite{ranasinghe2008surprise}. This serves as a motivation to change
-the model. \cite{oudeyer2006discovering} uses a reinforcement learning
-framework and regards the error as reward. The authors in
-\cite{ranasinghe2008surprise} let the robot figure out why there could
-be a surprise. In this paper, I assume that the surprise is caused by
+in the developmental robotics literature. They call the inconsistency
+described above as \textit{error} \cite{oudeyer2006discovering} or
+\textit{surprise} \cite{ranasinghe2008surprise,
+schmidhuber2006developmental}. This serves as a motivation to change
+the model. \cite{oudeyer2006discovering} uses a metric to describe the
+global inconsistency, and takes advantage of the reinforcement
+learning framework to plan to get to the states with the least global
+inconsistency. The authors in \cite{ranasinghe2008surprise} used logic
+rules as the model, and let the robot figure out why there could be a
+surprise. In this paper, I assume that the surprise is caused by
 insufficient or noisy data.
 
 There is an assumption in \cite{CSJ06} that there is a mapping from
-action and difference of state, i.e. $A \rightarrow \Delta S$. This is
-true in robot motion. If this is not true, so that $S \times A
-\rightarrow S$ is the best we can estimate, this would become a more
-interesting problem. We might know that a certain $(s, a)$ is
-inconsistent and we want to gather more data on it. But our action
-model might not not well-learned. So the reward should be a compromise
-between inconsistency of that $(s, a)$ and the cost to reach it.
+action to the difference of state, i.e. $A \rightarrow \Delta S$. This
+is true in robot motion. So it's possible to learn the difference in
+the observation. This is exactly how the task is designed in
+\cite{ICDL10-hester}. If this is not true, so that $S \times A
+\rightarrow S$ is the best we can estimate, this would become more
+challanging but still possibly to be dealt with. We might know that a
+certain $(s, a)$ is inconsistent and we want to gather more data on
+it. But our action model might not be well-learned. So the reward
+should be a compromise between inconsistency of that $(s, a)$ and the
+cost to reach it.
 
 There are also other related works on learning the action model. But
 they're using very different approach. They make use of the external
