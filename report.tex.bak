@@ -19,7 +19,7 @@
 \section{Literature Review}
 
 \cite{CSJ06} described a way that action model and sensor model of a
-robot can be learned simultaneously without external feedback.  In
+robot can be learned simutaneously without external feedback.  In
 their algorithm, called ASAMI, actions are selected randomly in the
 training. However, this can be biased according to the current belief.
 In this sense, the agent should be able to determine which action
@@ -73,7 +73,7 @@ is true in robot motion. So it's possible to learn the difference in
 the observation. This is exactly how the task is designed in
 \cite{ICDL10-hester}. If this is not true, so that $S \times A
 \rightarrow S$ is the best we can estimate, this would become more
-challenging but still possibly to be dealt with. We might know that a
+challanging but still possibly to be dealt with. We might know that a
 certain $(s, a)$ is inconsistent and we want to gather more data on
 it. But our action model might not be well-learned. So the reward
 should be a compromise between inconsistency of that $(s, a)$ and the
