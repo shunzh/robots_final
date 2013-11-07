@@ -51,12 +51,25 @@ becomes more essential. This can be proceeded if this proposal works
 in one-dimensional environment.
 
 Compared with this proposed method, some similar ideas are discussed
-in the developmental robotics literature. Action selection using
-Reinforcement Learning framework \cite{oudeyer2006discovering,
-schmidhuber2006developmental}.
+in the developmental robotics literature \cite{oudeyer2006discovering,
+schmidhuber2006developmental, ranasinghe2008surprise}. They call the
+inconsistency described above as \textit{error}
+\cite{oudeyer2006discovering} or \textit{surprise}
+\cite{ranasinghe2008surprise}. This serves as a motivation to change
+the model. \cite{oudeyer2006discovering} uses a reinforcement learning
+framework and regards the error as reward. The authors in
+\cite{ranasinghe2008surprise} let the robot figure out why there could
+be a surprise. In this paper, I assume that the surprise is caused by
+insufficient or noisy data.
 
 There is an assumption in \cite{CSJ06} that there is a mapping from
-action and difference of state, i.e. $A \rightarrow \Delta S$.
+action and difference of state, i.e. $A \rightarrow \Delta S$. This is
+true in robot motion. If this is not true, so that $S \times A
+\rightarrow S$ is the best we can estimate, this would become a more
+interesting problem. We might know that a certain $(s, a)$ is
+inconsistent and we want to gather more data on it. But our action
+model might not not well-learned. So the reward should be a compromise
+between inconsistency of that $(s, a)$ and the cost to reach it.
 
 There are also other related works on learning the action model. But
 they're using very different approach. They make use of the external
