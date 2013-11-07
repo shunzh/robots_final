@@ -18,42 +18,54 @@
 \sloppy
 \section{Literature Review}
 
-In \cite{CSJ06}, action model and sensor model are both autonomously
-learned by the robot in a bootstrapping way. Actions are selected
-randomly in the training. However, this can be biased according to the
-current belief.  In this sense, the agent should be able to determine
-which action leads to most uncertain results and need more samples.
-The agent doesn't know the correctness of the models. It only
-knows the consistency of them. For example, states with larger
-difference in action model and sensor model ($|W_a - W_s|$) should be
-re-learned.  Unobserved states, even possibly predicted by the current
-model, should also have higher priorities to be visited.
+Authors of \cite{CSJ06} described a way that action model and sensor
+model of a robot can be learned without external feedback.  In their
+algorithm, called ASAMI, actions are selected randomly in the
+training. However, this can be biased according to the current belief.
+In this sense, the agent should be able to determine which action
+would lead to most uncertain results and need more samples.  The agent
+doesn't know the correctness of the models. It only knows the
+consistency of them. For example, states with larger difference in
+action model and sensor model ($|W_a - W_s|$) should be considered as
+inconsistent. Unobserved states can be also assumed as inconsistent.
 
-The first author of \cite{CSJ06}, Dan Stronger commented that "an
-action could be causing problems is because the action model function
-being fit, with the degrees of freedom that it has, just fits to a
-function that's not especially accurate for that action".
+The first author of \cite{CSJ06}, Dan Stronger, commented that ``One
+possible reason the $W_a$ is wrong after a certain action is that the
+action is just very noisy \ldots This is a good reason to gather more
+data for that action (the noisier something is, the more data you need
+to estimate its expected value accurately).  But another possible
+reason  an action could be causing problems is because the action
+model function being fit, with the degrees of freedom that it has,
+just fits to a function that's not especially accurate for that
+action''. This would a problem in degree selection in the polynomial
+regression, which is discussed in \cite{IJAIT08-stronger}. In this
+paper, I'll give our action model proper degrees of freedom. So if the
+action model is inconsistent, the reason should be either few data
+gathered to make consistency happen, or the data gathered are noisy
+and not making much sense.
 
-This would a problem in degree selection in the polynomial regression.
-Observed inconsistency can be caused by underfitting.  In this paper,
-I'll give our action model proper degrees of freedom. So if the action
-model is inconsistent, the reason should be either few data gathered
-to make consistency happen, or the data gathered are noisy and not
-making much sense.
+There is a two-dimensional version of ASAMI discussed in
+\cite{ICRA08-stronger}.  As the action space is larger in higher
+dimension, biasing actions instead of random selection on actions
+becomes more essential. This can be proceeded if this proposal works
+in one-dimensional environment.
 
 Compared with this proposed method, some similar ideas are discussed
 in the developmental robotics literature. Action selection using
-Reinforcement Learning framework \cite{oudeyer2006discovering}
-\cite{schmidhuber2006developmental}.
+Reinforcement Learning framework \cite{oudeyer2006discovering,
+schmidhuber2006developmental}.
 
+There is an assumption in \cite{CSJ06} that there is a mapping from
+action and difference of state, i.e. $A \rightarrow \Delta S$.
 
-Two-dimensional ASAMI has been discussed in \cite{ICRA08-stronger}.
-
-an instance-based action model is learned empirically by robots trying
-actions in the environment \cite{LNAI2007-ahmadi}.
+There are also other related works on learning the action model. But
+they're using very different approach. They make use of the external
+data and assume that the sensor model is well calibrated. The data are
+represented as either statistics in \cite{And_learningand} or
+instances in \cite{LNAI2007-ahmadi}.
 
 %=====================================================================
-\bibliographystyle{abbrv}
+\bibliographystyle{plain}
 
 \bibliography{report}
 
