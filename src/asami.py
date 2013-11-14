@@ -1,4 +1,5 @@
 from random import random
+import simulate
 
 class Asami:
   T_START = 10
@@ -11,7 +12,13 @@ class Asami:
     # content are (act, obs) tuples
     self.history = []
 
+    self.world = simulate.Simulator()
+
   def run(self):
+    action = __getAction()
+    self.world.act(action)
+    obs = self.world.observe()
+
     if self.t < 2 * self.T_START:
       w_a += actionModel_0(action)     
     else:
@@ -24,17 +31,18 @@ class Asami:
 
     updateSensorModel(obs, w_a)
 
+    history.append([action, obs])
+
   # action range : [-10, 10]
-  def getAction(self):
+  def __getAction(self):
     # naive
     return 20 * random() - 10
 
 
-# experience
-class Experience:
-  def __init__(self, act, obs):
-    self.act = act
-    self.obs = obs
+class PolyRegressionModel:
+  def __init__(self, c):
+    self.c = c
 
 
-class ActionModel:
+ActionModel = PolyRegressionModel
+SensorModel = PolyRegressionModel
