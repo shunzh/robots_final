@@ -1,11 +1,13 @@
+#!/usr/bin/python
+
 from random import random
-import numpy
+import numpy as np
 import copy
 
 import simulate
 
 class Asami:
-  T_START = 0
+  T_START = 50
   Lambda = .1
 
   def __init__(self):
@@ -14,10 +16,10 @@ class Asami:
     self.w_s = 0
 
     # action model with init config
-    self.actionModel = ActionModel([0, .01, 0])
+    self.actionModel = ActionModel(np.array([0, .01, 0]))
     self.actionModelInit = self.actionModel.copy()
 
-    self.sensorModel = SensorModel([0, 0, 0])
+    self.sensorModel = SensorModel(np.array([0, 0, 0]))
 
     self.world = simulate.Simulator()
 
@@ -55,21 +57,16 @@ class PolyRegressionModel:
     self.y = []
 
   def __getitem__(self, key):
-    print "c", self.c
-    retVal = 0
-    for i in range(len(self.c)):
-      xi = key ** i
-      retVal += xi * self.c[i]
-
-    return retVal
+    p = np.poly1d(self.c)
+    return p(key)
 
   def update(self, xi, yi):
     # NON-INCREMENTAL
     self.x.append(xi)
     self.y.append(yi)
 
-    self.c = numpy.polyfit(self.x, self.y, 2)
-    print self.x, self.y, self.c
+    self.c = np.polyfit(self.x, self.y, 2)
+    print "got ", self.c
 
   def copy(self):
     return copy.deepcopy(self)
@@ -82,9 +79,10 @@ SensorModel = PolyRegressionModel
 # unit test
 if __name__ == "__main__":
   a = Asami()
-  for i in range(10):
+  for i in range(1000):
     a.run()
-  print a.w_a
-  print a.w_s
-  print a.actionModel.c
-  print a.sensorModel.c
+    print "Iteration #", i
+    print a.w_a
+    print a.w_s
+    print a.actionModel.c
+    print a.sensorModel.c
