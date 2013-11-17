@@ -15,8 +15,8 @@ class Simulator:
     self.cameraHeight = 240
 
   def act(self, action):
-    if action > 10 or action < 10:
-      raise Exception("Invalid action")
+    if action > 10 or action < -10:
+      raise Exception("Invalid action" + str(action))
       return None
 
     self.s += self.__getV(action)

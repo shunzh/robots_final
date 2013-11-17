@@ -1,4 +1,7 @@
 from random import random
+import numpy
+import copy
+
 import simulate
 
 class Asami:
@@ -9,29 +12,33 @@ class Asami:
     self.t = 0
     self.w_a = 0
     self.w_s = 0
-    # content are (act, obs) tuples
-    self.history = []
+
+    # action model with init config
+    self.actionModel = ActionModel([0, .01, 0])
+    self.actionModelInit = self.actionModel.copy()
+
+    self.sensorModel = SensorModel([0, 0, 0])
 
     self.world = simulate.Simulator()
 
   def run(self):
-    action = __getAction()
+    action = self.__getAction()
     self.world.act(action)
     obs = self.world.observe()
 
     if self.t < 2 * self.T_START:
-      w_a += actionModel_0(action)     
+      self.w_a += self.actionModelInit[action]
     else:
-      w_a += actionModel(action)     
+      self.w_a += self.actionModel[action]
 
     if self.t > self.T_START:
-      w_s = sensorModel(obs)
-      updateActionModel(action, w_s)
-      w_a = (1 - Lambda) * w_a + Lambda * w_s
+      old_w_s = self.w_s
+      self.w_s = self.sensorModel(obs)
+      self.actionModel.update(action, self.w_s - old_w_s)
 
-    updateSensorModel(obs, w_a)
+      self.w_a = (1 - Lambda) * self.w_a + Lambda * self.w_s
 
-    history.append([action, obs])
+    self.sensorModel.update(obs, self.w_a)
 
   # action range : [-10, 10]
   def __getAction(self):
@@ -42,7 +49,33 @@ class Asami:
 class PolyRegressionModel:
   def __init__(self, c):
     self.c = c
+    self.x = []
+    self.y = []
+
+  def __getitem__(self, key):
+    retVal = 0
+    for i in range(len(self.c)):
+      xi = key ** i
+      retVal += xi * self.c[i]
+
+    return retVal
+
+  def update(self, xi, yi):
+    # NON-INCREMENTAL
+    self.x.append(xi)
+    self.y.append(yi)
+
+    self.c = numpy.polyfit(self.x, self.y, 2)
+
+  def copy(self):
+    return copy.deepcopy(self)
 
 
 ActionModel = PolyRegressionModel
 SensorModel = PolyRegressionModel
+
+
+# unit test
+if __name__ == "__main__":
+  a = Asami()
+  a.run()
