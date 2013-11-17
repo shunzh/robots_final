@@ -5,7 +5,7 @@ import copy
 import simulate
 
 class Asami:
-  T_START = 10
+  T_START = 0
   Lambda = .1
 
   def __init__(self):
@@ -33,12 +33,14 @@ class Asami:
 
     if self.t > self.T_START:
       old_w_s = self.w_s
-      self.w_s = self.sensorModel(obs)
+      self.w_s = self.sensorModel[obs]
       self.actionModel.update(action, self.w_s - old_w_s)
 
-      self.w_a = (1 - Lambda) * self.w_a + Lambda * self.w_s
+      self.w_a = (1 - self.Lambda) * self.w_a + self.Lambda * self.w_s
 
     self.sensorModel.update(obs, self.w_a)
+
+    self.t += 1
 
   # action range : [-10, 10]
   def __getAction(self):
@@ -53,6 +55,7 @@ class PolyRegressionModel:
     self.y = []
 
   def __getitem__(self, key):
+    print "c", self.c
     retVal = 0
     for i in range(len(self.c)):
       xi = key ** i
@@ -66,6 +69,7 @@ class PolyRegressionModel:
     self.y.append(yi)
 
     self.c = numpy.polyfit(self.x, self.y, 2)
+    print self.x, self.y, self.c
 
   def copy(self):
     return copy.deepcopy(self)
@@ -78,4 +82,9 @@ SensorModel = PolyRegressionModel
 # unit test
 if __name__ == "__main__":
   a = Asami()
-  a.run()
+  for i in range(10):
+    a.run()
+  print a.w_a
+  print a.w_s
+  print a.actionModel.c
+  print a.sensorModel.c
