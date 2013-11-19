@@ -1,7 +1,8 @@
-args = argv();
-disp(args);
+#! /usr/bin/octave -qf
+
+args = str2num(cell2mat(argv ()));
 x = 0 : 500;
-y = args{1} * (x .^ 2) + args{2} * x + args{3};
+y = args(1) * (x .^ 2) + args(2) * x + args(3);
 plot (x, y, "r");
 hold on;
 
