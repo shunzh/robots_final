@@ -37,6 +37,9 @@ class Simulator:
 # unit test
 if __name__ == "__main__":
   s = Simulator()
-  for i in range(800):
+  # init
+  s.s = -500
+
+  for i in range(1000):
     s.act(10)
     print s.s, s.observe()

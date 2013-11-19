@@ -16,7 +16,7 @@ class Asami:
     self.w_s = 0
 
     # action model with init config
-    self.actionModel = ActionModel(np.array([0, .01, 0]))
+    self.actionModel = ActionModel(np.array([0, .1, 0]))
     self.actionModelInit = self.actionModel.copy()
 
     self.sensorModel = SensorModel(np.array([0, 0, 0]))
@@ -36,7 +36,7 @@ class Asami:
     if self.t > self.T_START:
       old_w_s = self.w_s
       self.w_s = self.sensorModel[obs]
-      self.actionModel.update(action, self.w_s - old_w_s)
+      #self.actionModel.update(action, self.w_s - old_w_s)
 
       self.w_a = (1 - self.Lambda) * self.w_a + self.Lambda * self.w_s
 
@@ -79,10 +79,10 @@ SensorModel = PolyRegressionModel
 # unit test
 if __name__ == "__main__":
   a = Asami()
-  for i in range(1000):
+  for i in range(200):
     a.run()
     print "Iteration #", i
-    print a.w_a
-    print a.w_s
-    print a.actionModel.c
-    print a.sensorModel.c
+    print "w_a", a.w_a
+    print "w_s", a.w_s
+    print "Action Model", a.actionModel.c
+    print "Sensor Model", a.sensorModel.c

@@ -1,7 +1,7 @@
 #! /usr/bin/octave -qf
 
-args = str2num(cell2mat(argv ()));
-x = 0 : 500;
+args = dlmread("compare.in");
+x = 30 : 120;
 y = args(1) * (x .^ 2) + args(2) * x + args(3);
 plot (x, y, "r");
 hold on;
