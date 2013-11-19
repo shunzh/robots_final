@@ -1,6 +1,7 @@
 #! /usr/bin/octave -qf
 
 args = dlmread("compare.in");
+disp(args);
 x = 30 : 120;
 y = args(1) * (x .^ 2) + args(2) * x + args(3);
 plot (x, y, "r");
