@@ -53,10 +53,13 @@ class Asami:
 
 
 class PolyRegressionModel:
+  Gama = .999
+
   def __init__(self, c):
     self.c = c
     self.x = []
     self.y = []
+    self.w = []
 
   def __getitem__(self, key):
     p = np.poly1d(self.c)
@@ -66,8 +69,10 @@ class PolyRegressionModel:
     # NON-INCREMENTAL
     self.x.append(xi)
     self.y.append(yi)
+    self.w.append(1)
+    self.w = [x * self.Gama for x in self.w]
 
-    self.c = np.polyfit(self.x, self.y, 2)
+    self.c = np.polyfit(self.x, self.y, 2, w=self.w)
     print "got ", self.c
 
   def copy(self):
