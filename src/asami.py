@@ -16,12 +16,11 @@ class Asami:
     self.w_s = 0
 
     # action model with init config
-    #self.actionModel = ActionModel(np.array([0, .1, 0]))
-    self.actionModel = ActionModel(np.array([0, .01, 0]))
+    self.actionModel = ActionModel(np.array([0, .01, 0]), np.array([0, .1, 0]))
     self.actionModelInit = self.actionModel.copy()
 
-    #self.sensorModel = SensorModel(np.array([-1.9135e-01, 4.0880e+01, -1.7393e+03]))
-    self.sensorModel = SensorModel(np.array([0, 0, 0]))
+    #self.sensorModel = SensorModel # ANSWER
+    self.sensorModel = SensorModel(np.array([0, 0, 0]), np.array([-1.9135e-01, 4.0880e+01, -1.7393e+03]))
 
     self.world = simulate.Simulator()
 
@@ -55,11 +54,13 @@ class Asami:
 class PolyRegressionModel:
   Gama = .999
 
-  def __init__(self, c):
+  def __init__(self, c, answer):
     self.c = c
     self.x = []
     self.y = []
     self.w = []
+    self.answer = answer
+    self.error = []
 
   def __getitem__(self, key):
     p = np.poly1d(self.c)
@@ -75,6 +76,11 @@ class PolyRegressionModel:
     self.c = np.polyfit(self.x, self.y, 2, w=self.w)
     print "got ", self.c
 
+  def getError(self):
+    error = np.linalg.norm(self.c - self.answer)
+    self.error.append(error)
+    return error
+    
   def copy(self):
     return copy.deepcopy(self)
 
