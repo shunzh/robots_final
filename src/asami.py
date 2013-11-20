@@ -6,6 +6,11 @@ import copy
 
 import simulate
 
+
+class Direction:
+  Forward = 0
+  Backward = 1
+
 class Asami:
   T_START = 100
   Lambda = 1.0 / 30
@@ -14,13 +19,14 @@ class Asami:
     self.t = 50
     self.w_a = 0
     self.w_s = 0
+    self.direct = Direction.Forward
 
     # action model with init config
-    self.actionModel = ActionModel(np.array([0, .01, 0]), np.array([0, .1, 0]))
+    self.actionModel = ActionModel(np.array([0, 0, 1]))
     self.actionModelInit = self.actionModel.copy()
 
     #self.sensorModel = SensorModel # ANSWER
-    self.sensorModel = SensorModel(np.array([0, 0, 0]), np.array([-1.9135e-01, 4.0880e+01, -1.7393e+03]))
+    self.sensorModel = SensorModel(np.array([0, 0, 0]))
 
     self.world = simulate.Simulator()
 
@@ -48,19 +54,25 @@ class Asami:
   # action range : [-10, 10]
   def __getAction(self):
     # naive
-    return 20 * random() - 10
+    if self.world.s > 100 and self.direct == Direction.Forward:
+      self.direct = Direction.Backward
+    elif self.world.s < -100 and self.direct == Direction.Backward:
+      self.direct = Direction.Forward
+
+    if self.direct == Direction.Forward:
+      return 10 * random()
+    else:
+      return - 10 * random()
 
 
 class PolyRegressionModel:
-  Gama = .999
+  Gama = .99
 
-  def __init__(self, c, answer):
+  def __init__(self, c):
     self.c = c
     self.x = []
     self.y = []
     self.w = []
-    self.answer = answer
-    self.error = []
 
   def __getitem__(self, key):
     p = np.poly1d(self.c)
@@ -72,14 +84,9 @@ class PolyRegressionModel:
     self.y.append(yi)
     self.w.append(1)
     self.w = [x * self.Gama for x in self.w]
-
+    
     self.c = np.polyfit(self.x, self.y, 2, w=self.w)
 
-  def getError(self):
-    error = np.linalg.norm(self.c - self.answer)
-    self.error.append(error)
-    return error
-    
   def copy(self):
     return copy.deepcopy(self)
 
@@ -91,12 +98,14 @@ SensorModel = PolyRegressionModel
 # unit test
 if __name__ == "__main__":
   a = Asami()
-  err = open("err.out", 'w')
+  log = open("log.out", 'w')
 
-  for i in range(3000):
+  for i in range(1000):
     a.run()
-    err.write(str(a.actionModel.getError()) + " " + str(a.sensorModel.getError()) + "\n")
+    log.write(str(a.world.s) + " " + str(a.w_s) + " " + str(a.w_a) + "\n")
 
   print "Action Model", a.actionModel.c
   print "Sensor Model", a.sensorModel.c
   print "End with", a.w_a, a.w_s
+
+  log.close()
