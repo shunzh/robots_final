@@ -17,7 +17,7 @@ class Asami:
 
     # action model with init config
     #self.actionModel = ActionModel(np.array([0, .1, 0]))
-    self.actionModel = ActionModel(np.array([0, 0, 1]))
+    self.actionModel = ActionModel(np.array([0, .01, 0]))
     self.actionModelInit = self.actionModel.copy()
 
     #self.sensorModel = SensorModel(np.array([-1.9135e-01, 4.0880e+01, -1.7393e+03]))
