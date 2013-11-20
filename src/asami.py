@@ -74,7 +74,6 @@ class PolyRegressionModel:
     self.w = [x * self.Gama for x in self.w]
 
     self.c = np.polyfit(self.x, self.y, 2, w=self.w)
-    print "got ", self.c
 
   def getError(self):
     error = np.linalg.norm(self.c - self.answer)
@@ -92,10 +91,12 @@ SensorModel = PolyRegressionModel
 # unit test
 if __name__ == "__main__":
   a = Asami()
-  for i in range(1000):
+  err = open("err.out", 'w')
+
+  for i in range(3000):
     a.run()
-    print "Iteration #", i
-    print "w_a", a.w_a
-    print "w_s", a.w_s
-    print "Action Model", a.actionModel.c
-    print "Sensor Model", a.sensorModel.c
+    err.write(str(a.actionModel.getError()) + " " + str(a.sensorModel.getError()) + "\n")
+
+  print "Action Model", a.actionModel.c
+  print "Sensor Model", a.sensorModel.c
+  print "End with", a.w_a, a.w_s
