@@ -1,6 +1,5 @@
 \documentclass[10pt]{article}
 \usepackage{latexsym}
-\usepackage{qtree}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{natbib}
@@ -103,16 +102,15 @@ Remove the assumption of knowing the effects of the actions.
 \Function{getAction}{}
 \State $trials\gets 0$
     \While {True}
-        \If {$trials\leq$ LEARNING\_TRIALS}
-            \State $action \gets$ the action with least confidence
+        \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
+            \State $action \gets$ the action such that $samples[action]$ has the largest variance
         \Else
             \State $action \gets$ appropriate action for state exploration
         \EndIf
         \State increase $trials$
     \EndWhile
 \EndFunction
-
-\Comment{This is called after an action is done}
+\\
 \Function{updateAction}{$action, observation$}
     \State add $observation$ to $samples[action]$
 \EndFunction
@@ -123,17 +121,48 @@ Remove the assumption of knowing the effects of the actions.
 
 \subsection{Test in Simulator}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\columnwidth]{simResult.png}
+\caption{The Simulator.}
+\label{fig:fuelworld}
+\end{figure}
+
+
 $T\_START$ = 10. $\lambda$ = 0.2. 
+
+Action model and sensor model are both assumed to be cubic functions.
+We have four parameters to estimate, in the form of $f(x) = c_0 + c_1
+x + c_2 x^2 + c_3 x^3$.
 
 \subsection{Test on Nao}
 
-\section{Discussion}
+The challenges are that beacon height is too noisy.
 
-\subsection{Challanges}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\columnwidth]{demoResult.png}
+\caption{Testing of ASAMI on Nao during the class demo. The
+observation comes continuously. It's kidnapped at around 3,500 step.
+(The colors are different from those in real-time plotting in class,
+as I'm using a different tool for plotting this.)}
+\label{fig:fuelworld}
+\end{figure}
 
-\section{Conclusion}
 
-%Issues in implementation.
+\section{Discussion and Conclusion}
+
+It's possible that learning each discrete action independently would
+have a better performance. Though it is interesting to estimate what
+the most likely continuous model, expressed by polynomial function, by
+the samples. It has several constraints. First, degree selection
+should be determined, possibly using methods in
+\cite{IJAIT08-stronger}. But the model many not be a small-dimensional
+polynomial, so there might be too many parameters to estimate. Second,
+the inherent drawback of function approximation method is that local
+updates could have global effects. This is especially harmful in a
+noisy environment.
+
 %=====================================================================
 \bibliographystyle{plain}
 
