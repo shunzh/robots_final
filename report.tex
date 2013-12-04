@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt]{IEEEtran}
 \usepackage{latexsym}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -30,13 +30,6 @@ them. For example, states with larger difference in action model and
 sensor model ($|W_a - W_s|$) should be considered as inconsistent.
 Unobserved states can be also assumed as inconsistent.
 
-In the perspective of model-adaptive agents \cite{maes1993modeling},
-This solves the problem of \textit{action selection}, as it
-accelerates the progress towards its goal - consistency between action
-model and transition model. This also solves the problem of
-\textit{learning from experience}, as the inconsistency is an
-essential information that can be used for further decision-making.
-
 The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
 possible reason the $W_a$ is wrong after a certain action is that the
 action is just very noisy \ldots This is a good reason to gather more
@@ -51,13 +44,36 @@ inconsistent, the reason should be that either there are too few data
 gathered to make consistency happen, or the data gathered are too
 noisy.
 
+The action selection is even necessary in some environment. The
+experiments in \cite{CSJ06} assume that \textit{we} know the effect
+the environent, while the robot does not. So to explore the
+environment, we make the robot \textit{walk forward} and \textit{walk
+backward} alternatively to explore the states. These two actions may
+be unknown. If the agent still chooses actions uniformly random, then
+exploration would be low effecient.
+
+Take 1-dimensional walk for example. Let the range of velocity be
+$[-a, a]$. The expected forward steps to take to reach distance n is
+$n/a$
+
+
+for some environment so that exploration on actions, or
+generally action selection, is required.
+
+\section{Literature Review}
+
+In the perspective of model-adaptive agents \cite{maes1993modeling},
+This solves the problem of \textit{action selection}, as it
+accelerates the progress towards its goal - consistency between action
+model and transition model. This also solves the problem of
+\textit{learning from experience}, as the inconsistency is an
+essential information that can be used for further decision-making.
+
 There is a two-dimensional version of ASAMI discussed in
 \cite{ICRA08-stronger}.  As the action space is larger in higher
 dimension, biasing on actions instead of random selection on actions
-becomes more essential. This can be proceeded if the proposed
-modification works in one-dimensional environment.
-
-\section{Literature Review}
+becomes more essential. The proposed approach can be proceeded if the
+proposed modification works in one-dimensional environment.
 
 Compared with this proposed method, some similar ideas are discussed
 in the developmental robotics literature. They call the inconsistency
@@ -90,7 +106,8 @@ There are also other related works on learning the action model. But
 they're using very different approach. They assume that one model,
 usually the sensor model, is well calibrated. The data are represented
 as either statistics \cite{And_learningand} or instances
-\cite{LNAI2007-ahmadi}.
+\cite{LNAI2007-ahmadi}. These would be further analyzed and compared
+with our approach in section \ref{sec:dis}.
 
 \section{Proposed Algorithm}
 
@@ -123,7 +140,7 @@ Remove the assumption of knowing the effects of the actions.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\columnwidth]{simResult.png}
+\includegraphics[width=\columnwidth]{simResult.png}
 \caption{The Simulator.}
 \label{fig:fuelworld}
 \end{figure}
@@ -132,8 +149,7 @@ Remove the assumption of knowing the effects of the actions.
 $T\_START$ = 10. $\lambda$ = 0.2. 
 
 Action model and sensor model are both assumed to be cubic functions.
-We have four parameters to estimate, in the form of $f(x) = c_0 + c_1
-x + c_2 x^2 + c_3 x^3$.
+We have four parameters to estimate for each model.
 
 \subsection{Test on Nao}
 
@@ -141,16 +157,20 @@ The challenges are that beacon height is too noisy.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\columnwidth]{demoResult.png}
+\includegraphics[width=\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
-observation comes continuously. It's kidnapped at around 3,500 step.
-(The colors are different from those in real-time plotting in class,
-as I'm using a different tool for plotting this.)}
+observation comes continuously (30 frames per second). Everytime the
+robot changes from walking forward to warking backward (when the
+height the beacon turns to decreasing). It's kidnapped at around 3,500
+step.  (The colors are different from those in real-time plotting in
+class)}
+
 \label{fig:fuelworld}
 \end{figure}
 
 
 \section{Discussion and Conclusion}
+\label{sec:dis}
 
 It's possible that learning each discrete action independently would
 have a better performance. Though it is interesting to estimate what
