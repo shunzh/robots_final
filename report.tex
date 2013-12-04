@@ -1,6 +1,7 @@
 \documentclass[10pt]{article}
 \usepackage{latexsym}
 \usepackage{qtree}
+\usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -16,7 +17,8 @@
 %\end{abstract}
 
 \sloppy
-\section{Literature Review}
+
+\section{Introduction}
 
 The action model and sensor model of a robot can be learned
 simultaneously without external feedback \cite{CSJ06}.  In the ASAMI
@@ -56,6 +58,8 @@ dimension, biasing on actions instead of random selection on actions
 becomes more essential. This can be proceeded if the proposed
 modification works in one-dimensional environment.
 
+\section{Literature Review}
+
 Compared with this proposed method, some similar ideas are discussed
 in the developmental robotics literature. They call the inconsistency
 described above as \textit{error} \cite{oudeyer2006discovering},
@@ -88,6 +92,46 @@ they're using very different approach. They assume that one model,
 usually the sensor model, is well calibrated. The data are represented
 as either statistics \cite{And_learningand} or instances
 \cite{LNAI2007-ahmadi}.
+
+\section{Proposed Algorithm}
+
+Remove the assumption of knowing the effects of the actions.
+
+\begin{algorithm}
+\caption{Strong ASAMI}\label{asami}
+\begin{algorithmic}
+\Function{getAction}{}
+\State $trials\gets 0$
+    \While {True}
+        \If {$trials\leq$ LEARNING\_TRIALS}
+            \State $action \gets$ the action with least confidence
+        \Else
+            \State $action \gets$ appropriate action for state exploration
+        \EndIf
+        \State increase $trials$
+    \EndWhile
+\EndFunction
+
+\Comment{This is called after an action is done}
+\Function{updateAction}{$action, observation$}
+    \State add $observation$ to $samples[action]$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experiments}
+
+\subsection{Test in Simulator}
+
+$T\_START$ = 10. $\lambda$ = 0.2. 
+
+\subsection{Test on Nao}
+
+\section{Discussion}
+
+\subsection{Challanges}
+
+\section{Conclusion}
 
 %Issues in implementation.
 %=====================================================================
