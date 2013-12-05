@@ -17,7 +17,7 @@
 
 \sloppy
 
-\section{Introduction}
+\section{Analysis of ASAMI}
 
 The action model and sensor model of a robot can be learned
 simultaneously without external feedback \cite{CSJ06}.  In the ASAMI
@@ -38,27 +38,31 @@ could be causing problems is because the action model function being
 fit, with the degrees of freedom that it has, just fits to a function
 that's not especially accurate for that action''. This would be a
 problem in degree selection in the polynomial regression, which is
-discussed in \cite{IJAIT08-stronger}. In this paper, I'll give our
+discussed in \cite{IJAIT08-stronger}. In this report, I'll give our
 action model proper degrees of freedom. So, if the action model is
 inconsistent, the reason should be that either there are too few data
 gathered to make consistency happen, or the data gathered are too
 noisy.
 
+\hfill
+
 The action selection is even necessary in some environment. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effect
-the environent, while the robot does not. So to explore the
-environment, we make the robot \textit{walk forward} and \textit{walk
-backward} alternatively to explore the states. These two actions may
-be unknown. If the agent still chooses actions uniformly random, then
-exploration would be low effecient.
+the actions -- for example, some actions would make it go forward, and
+others make it go backward -- while the robot does not. So to explore
+the environment, we make the robot walk forward and walk backward
+alternatively to explore the state space. However, these the actions
+may be totally unknown.  If the agent still chooses actions uniformly
+random, then exploration would be low effecient.
 
-Take 1-dimensional walk for example. Let the range of velocity be
-$[-a, a]$. The expected forward steps to take to reach distance n is
-$n/a$
-
-
-for some environment so that exploration on actions, or
-generally action selection, is required.
+For example we consider 1-dimensional walk. Let the world be in the
+range of $[0,n]$. The agent starts at 0, and wants to reach $n$. If
+the range of velocity is $[-2a, 2a]$, and in every step the agent
+chooses an action uniformly random.  Then, the expected absolute
+velocity is $a$.  The expected \textit{moving forward} steps needed to
+take to reach distance $n$ is $\frac{n}{a}$. This forms a
+\textit{random walk} \cite{motwani1995randomized} problem. The
+expected steps needed to take to reach distance $n$ is $O(n^2)$.
 
 \section{Literature Review}
 
@@ -85,7 +89,7 @@ inconsistency \cite{oudeyer2006discovering}. Then, a reinforcement
 learning framework can be used to plan to get to the states with the
 least global inconsistency. The authors in
 \cite{ranasinghe2008surprise} used logic rules as the model, and let
-the robot figure out why there could be a surprise. In this paper, I
+the robot figure out why there could be a surprise. In this report, I
 assume that the surprise is caused by insufficient or noisy data. So
 the surprise, or inconsistency, of an action, is simply caused by the
 data gathered at that action.
@@ -111,12 +115,28 @@ with our approach in section \ref{sec:dis}.
 
 \section{Proposed Algorithm}
 
-Remove the assumption of knowing the effects of the actions.
+In this section, I propose an algorithm that makes the agent choose
+action in a computationally cheap way. This can be applied when there
+is no prior domain knowledge about them. 
 
-\begin{algorithm}
-\caption{Strong ASAMI}\label{asami}
+Two essential functions are presented in Algorithm~\ref{alg:asami}. In
+each iteration (frame for Nao), \textsc{update} is called to update
+the knowledge on action effects. When the robot needs to decide which
+is the next action to take, \textsc{getAction} is called.
+
+\begin{algorithm*}[t]
+\caption{Strong ASAMI}\label{alg:asami}
 \begin{algorithmic}
-\Function{getAction}{}
+\Function{initialize}{$rangeOfActions$}
+    \State $actions \gets$ discretified $rangeOfActions$
+    \For{$action$ in $actions$}
+        $samples[action] \gets \{\}$ \Comment{This will contain
+	observations when $action$ is done}
+    \EndFor
+\EndFunction
+\\
+\Function{getAction}{} \Comment{This is called when the robot needs to
+decide an action}
 \State $trials\gets 0$
     \While {True}
         \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
@@ -128,11 +148,12 @@ Remove the assumption of knowing the effects of the actions.
     \EndWhile
 \EndFunction
 \\
-\Function{updateAction}{$action, observation$}
+\Function{update}{$action, observation$} \Comment{This is called when
+each observation is retrieved.}
     \State add $observation$ to $samples[action]$
 \EndFunction
 \end{algorithmic}
-\end{algorithm}
+\end{algorithm*}
 
 \section{Experiments}
 
