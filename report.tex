@@ -15,8 +15,6 @@
 %\begin{abstract}
 %\end{abstract}
 
-\sloppy
-
 \section{Analysis of ASAMI}
 
 The action model and sensor model of a robot can be learned
@@ -28,7 +26,7 @@ most uncertain results and thus need more samples.  The agent doesn't
 know the correctness of the models. It only knows the consistency of
 them. For example, states with larger difference in action model and
 sensor model ($|W_a - W_s|$) should be considered as inconsistent.
-Unobserved states can be also assumed as inconsistent.
+Unobserved state, action pairs can be also assumed as inconsistent.
 
 The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
 possible reason the $W_a$ is wrong after a certain action is that the
@@ -56,13 +54,18 @@ may be totally unknown.  If the agent still chooses actions uniformly
 random, then exploration would be low effecient.
 
 For example we consider 1-dimensional walk. Let the world be in the
-range of $[0,n]$. The agent starts at 0, and wants to reach $n$. If
-the range of velocity is $[-2a, 2a]$, and in every step the agent
-chooses an action uniformly random.  Then, the expected absolute
-velocity is $a$.  The expected \textit{moving forward} steps needed to
-take to reach distance $n$ is $\frac{n}{a}$. This forms a
-\textit{random walk} \cite{motwani1995randomized} problem. The
-expected steps needed to take to reach distance $n$ is $O(n^2)$.
+range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
+the range of velocity be $[-2a, 2a]$ (positive velocities mean going
+forward, and negative ones mean going backward), and in every step the
+agent chooses an action uniformly random.  Then, the expected absolute
+velocity is $a$. Assume the agent would ``bump into'' the boundary of
+$0$ and stays there if taking actions of going backward. The expected
+\textit{moving forward} steps needed to take to reach distance $n$ is
+$\frac{n}{a}$. This forms a \textit{random walk}
+\cite{motwani1995randomized} problem. The expected steps needed to
+take to reach distance $n$ is $O(n^2)$. This concludes that, if an
+agent takes random actions in an unkown domain, it's likely that the
+agent would confine itself in a small domain.
 
 \section{Literature Review}
 
@@ -115,14 +118,25 @@ with our approach in section \ref{sec:dis}.
 
 \section{Proposed Algorithm}
 
-In this section, I propose an algorithm that makes the agent choose
-action in a computationally cheap way. This can be applied when there
-is no prior domain knowledge about them. 
+In this section, I propose an algorithm, called Strong ASAMI, that
+makes the agent choose action in a computationally cheap way. This can
+be applied when there is no prior domain knowledge about them. The
+idea is that we devide the learning into two phases. The agent leanrs
+actions first and learns the state space later. In the frist
+phase, it chooses the action with least confidence to learn. In the
+second phase, it uses the actions it learned to explore the
+environment.
 
 Two essential functions are presented in Algorithm~\ref{alg:asami}. In
 each iteration (frame for Nao), \textsc{update} is called to update
 the knowledge on action effects. When the robot needs to decide which
 is the next action to take, \textsc{getAction} is called.
+
+The action selection strategy in phase 2 is quite vague. However, this
+is up to the agent how to plan to traverse the state space. For
+example, it might want to keep trying actions with positive $\Delta
+Observation$ so that before reaching a boundary, and then go the
+reverse way.
 
 \begin{algorithm*}[t]
 \caption{Strong ASAMI}\label{alg:asami}
@@ -148,9 +162,11 @@ decide an action}
     \EndWhile
 \EndFunction
 \\
-\Function{update}{$action, observation$} \Comment{This is called when
+\Function{update}{$action, \Delta observation$} \Comment{This is called when
 each observation is retrieved.}
-    \State add $observation$ to $samples[action]$
+    \State add $\Delta bservation$ to $samples[action]$ \Comment{It's
+    assumed that the change of observation is correlated to the
+    action, not the absolute observation.}
 \EndFunction
 \end{algorithmic}
 \end{algorithm*}
@@ -159,7 +175,7 @@ each observation is retrieved.}
 
 \subsection{Test in Simulator}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{simResult.png}
 \caption{The Simulator.}
@@ -176,7 +192,7 @@ We have four parameters to estimate for each model.
 
 The challenges are that beacon height is too noisy.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
