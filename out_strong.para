@@ -1,0 +1,229 @@
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[0], [0], [0], [0]]
+Asami: 84.7636363636 0.6 0
+AsamiFSM.v_x :  -1.0
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[0.0], [0.0], [0.0], [0.0]]
+VISION FRAME RATE: 29.3894
+Updating calibration
+Collection values: 0.26966(0.01) -0.633637(0.01) -0.125386(0.01) -18.1431(0.0001) -18.1126(0.0001) 
+new BIASES: 0.26966(0.01) -0.633637(0.01) -0.125386(0.01) -18.1431(0.0001) -18.1126(0.0001) 
+Calibration status changed to 1
+The walking engine is switching to stepping! 39079
+The walking engine is switching to stand! 40934
+Asami: 86.7213114754 -0.4 0
+AsamiFSM.v_x :  0.6
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[17.5625], [-0.05029296875], [0.000118255615234375], [-2.156198024749756e-05]]
+VISION FRAME RATE: 29.7888
+MOTION FRAME RATE: 98.7662
+The walking engine is switching to stepping! 43018
+The walking engine is switching to stand! 45055
+Asami: 100.983050847 0.2 0
+AsamiFSM.v_x :  -1.0
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[157.625], [-1.80810546875], [-0.016134262084960938], [0.00018437951803207397]]
+VISION FRAME RATE: 29.9904
+The walking engine is switching to stepping! 47151
+The walking engine is switching to stand! 49264
+Asami: 79.7090909091 -0.8 0
+AsamiFSM.v_x :  -0.2
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[-4814.972116117366], [163.43735108760302], [-1.8413604854445111], [0.006883186542231634]]
+VISION FRAME RATE: 29.9881
+The walking engine is switching to stepping! 51353
+MOTION FRAME RATE: 99.7187
+The walking engine is switching to stand! 53399
+The walking engine is switching to stepping! 55434
+Asami: 75.4237288136 -1.0 0
+AsamiFSM.v_x :  0.6
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[-88.6952296430245], [2.6494431065075332], [-0.026239098310838926], [8.634227110215775e-05]]
+Asami: 79.9069767442 -0.4 0
+AsamiFSM.v_x :  0.2
+Action Model :  [[0], [1], [0], [0]]
+Sensor Model :  [[-127.24475257168524], [3.9907833263350767], [-0.041687609936275294], [0.00014522303771280498]]
+VISION FRAME RATE: 29.9908
+The walking engine is switching to stand! 57460
+The walking engine is switching to stepping! 59546
+Asami: 82.5666666667 -0.198254121893 -0.191270609464
+AsamiFSM.v_x :  0.6
+Action Model :  [[0.19427305783420223], [3.7392718632410076e-13], [-1.7841322291923518], [0.0]]
+Sensor Model :  [[-125.36871871934272], [3.926363191421842], [-0.040955173695238045], [0.00014246543638174458]]
+VISION FRAME RATE: 29.9854
+The walking engine is switching to stand! 61564
+MOTION FRAME RATE: 99.7176
+The walking engine is switching to stepping! 63617
+The walking engine is switching to stand! 65634
+Asami: 93.1228070175 0.352488460241 0.155458788777
+AsamiFSM.v_x :  -0.2
+Action Model :  [[-0.5], [2.0], [2.5], [0.0]]
+Sensor Model :  [[-49.433802523475606], [1.2707734806335793], [-0.010199335476372084], [2.4584331659027736e-05]]
+VISION FRAME RATE: 29.9935
+The walking engine is switching to stepping! 67718
+The walking engine is switching to stand! 69797
+Asami: 93.3703703704 0.184489234025 0.312492329159
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.3125], [-0.625], [6.0], [-4.0]]
+Sensor Model :  [[-77.32671302309609], [2.2455770135693456], [-0.021481400264562467], [6.779735365389228e-05]]
+VISION FRAME RATE: 29.9895
+MOTION FRAME RATE: 99.718
+The walking engine is switching to stepping! 71852
+The walking engine is switching to stand! 73868
+The walking engine is switching to stepping! 75953
+Asami: 79.1636363636 -0.76144299831 -0.545171927647
+AsamiFSM.v_x :  -0.6
+Action Model :  [[-0.05962188908547317], [-0.9845681498623051], [1.0625838636203255], [2.8451943812025604]]
+Sensor Model :  [[-61.97589273302583], [1.703522359708586], [-0.015171155627299981], [4.35507394752066e-05]]
+Asami: 71.7586206897 -0.722287981667 -1.76201673668
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.07813182725842283], [1.3408451544188331], [-0.6316073609453348], [-1.1063821044020479]]
+Sensor Model :  [[102.45933655870613], [-3.8468245975882382], [0.046993698067502976], [-0.00018748833352641436]]
+VISION FRAME RATE: 29.7895
+The walking engine is switching to stand! 78069
+The walking engine is switching to stepping! 80193
+Asami: 78.3389830508 -0.496789062905 -0.634865711465
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.11365260740938776], [1.4744658566903102], [0.10076371195220268], [-0.5369077861998264]]
+Sensor Model :  [[93.62948998750653], [-3.534225231904202], [0.04334396134751728], [-0.00017342104053663654]]
+VISION FRAME RATE: 29.9894
+MOTION FRAME RATE: 99.7104
+The walking engine is switching to stand! 82240
+The walking engine is switching to stepping! 84324
+Asami: 82.2962962963 0.089944460217 -0.328440491647
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.10311596533709988], [1.4348295224854084], [-0.11648185040377079], [-0.7058327657401264]]
+Sensor Model :  [[76.79898211196996], [-2.9674885435924807], [0.037055291100998033], [-0.00015038735698691408]]
+VISION FRAME RATE: 29.9895
+The walking engine is switching to stand! 86370
+The walking engine is switching to stepping! 88425
+The walking engine is switching to stand! 90471
+Asami: 85.4482758621 0.515150226619 -0.0375803262094
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09751254859164904], [1.4137508052538443], [-0.23201366913964527], [-0.7956675587023518]]
+Sensor Model :  [[83.10161691837129], [-3.2371589625809065], [0.04075644798690092], [-0.00016674796350121812]]
+VISION FRAME RATE: 29.9895
+MOTION FRAME RATE: 99.7295
+The walking engine is switching to stepping! 92518
+The walking engine is switching to stand! 94572
+Asami: 90.2352941176 0.875619286558 0.336100242351
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.0955091182357859], [1.4062143781268315], [-0.273320600827601], [-0.8277868458104045]]
+Sensor Model :  [[123.8791376946574], [-4.710199064558992], [0.058341263556240364], [-0.00023605230904274327]]
+VISION FRAME RATE: 29.987
+The walking engine is switching to stepping! 96619
+The walking engine is switching to stand! 98673
+The walking engine is switching to stepping! 100720
+Asami: 104.413793103 0.959526398455 -0.588933688544
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.07633561873847006], [1.334088246410568], [-0.6686417716568922], [-1.1351791808711482]]
+Sensor Model :  [[2.4203942109452328], [-0.3306378507559202], [0.005983282532611156], [-2.85421550174636e-05]]
+Asami: 117.931034483 0.923848135457 -0.171695269511
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.07844480535276288], [1.3420225033560964], [-0.6251543466317155], [-1.101364394032828]]
+Sensor Model :  [[-26.1410863637866], [0.6704449356047917], [-0.005626588125121401], [1.5993967935799824e-05]]
+VISION FRAME RATE: 29.9919
+MOTION FRAME RATE: 99.7295
+The walking engine is switching to stand! 102744
+The walking engine is switching to stepping! 104830
+Asami: 129.122807018 1.16022516038 1.05045956904
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.08833076982410848], [1.3792111436302772], [-0.4213245215058219], [-0.9428711725111221]]
+Sensor Model :  [[-28.280251670086727], [0.7416456940156877], [-0.006407141303347075], [1.8809745349231827e-05]]
+VISION FRAME RATE: 29.7894
+The walking engine is switching to stand! 106875
+The walking engine is switching to stepping! 108923
+The walking engine is switching to stand! 110947
+Asami: 140.105263158 1.55322367685 1.58978208131
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.08975724198242441], [1.3845771916380745], [-0.3919133728597597], [-0.9200017632149553]]
+Sensor Model :  [[-27.760198032992776], [0.7249812595234175], [-0.0062321177517628], [1.8208352970673983e-05]]
+VISION FRAME RATE: 29.9897
+MOTION FRAME RATE: 99.7186
+The walking engine is switching to stepping! 113105
+The walking engine is switching to stand! 115249
+Asami: 100.530612245 0.613192706012 0.638052995731
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.08970250122105572], [1.3834296427763597], [-0.39228192975359377], [-0.9164327542346342]]
+Sensor Model :  [[-27.740295170557147], [0.7248881177783915], [-0.006236353823255492], [1.8236650494468654e-05]]
+VISION FRAME RATE: 29.9894
+The walking engine is switching to stepping! 117367
+The walking engine is switching to stand! 119350
+Asami: 78.9090909091 -0.350874216047 -0.411216626219
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.08903405266667086], [1.3694167324974025], [-0.3967824393688204], [-0.8728509911439915]]
+Sensor Model :  [[-27.677236239427657], [0.7237831203322003], [-0.006231581765047345], [1.8236277607001222e-05]]
+VISION FRAME RATE: 29.9895
+The walking engine is switching to stepping! 121600
+MOTION FRAME RATE: 99.7379
+The walking engine is switching to stand! 123533
+The walking engine is switching to stepping! 125601
+Asami: 87.1428571429 0.0685555281852 0.141320526827
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09028945495715135], [1.374189722187623], [-0.3709391633158461], [-0.8529625117947859]]
+Sensor Model :  [[-27.15553060478487], [0.7083706327739492], [-0.006084787638670264], [1.7783250830670852e-05]]
+Asami: 105.155555556 0.533569989019 0.7278423243
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09157293162730884], [1.3790694495553666], [-0.3445179578217079], [-0.8326292692610693]]
+Sensor Model :  [[-27.953688778694413], [0.7360043497806146], [-0.006391282240752361], [1.885885312502729e-05]]
+VISION FRAME RATE: 29.9895
+The walking engine is switching to stand! 127714
+The walking engine is switching to stepping! 129802
+Asami: 134.813559322 1.03603999847 1.31794263174
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.09266714394591702], [1.3832296013690062], [-0.32199288261298165], [-0.8152944123253505]]
+Sensor Model :  [[-28.525565036088665], [0.7507852144241269], [-0.006504565069543666], [1.908448609444849e-05]]
+VISION FRAME RATE: 29.9894
+MOTION FRAME RATE: 99.7003
+The walking engine is switching to stand! 131887
+The walking engine is switching to stepping! 133971
+Asami: 100.421052632 0.16297373047 0.601089520888
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.09400209352595112], [1.411176145200777], [-0.3129739382777714], [-0.9021493912343743]]
+Sensor Model :  [[-28.10507310821413], [0.744916137576979], [-0.006516145091707948], [1.93208641430416e-05]]
+VISION FRAME RATE: 29.9876
+The walking engine is switching to stand! 136117
+The walking engine is switching to stepping! 138175
+The walking engine is switching to stand! 140259
+Asami: 76.5853658537 -0.721578894502 -0.595778251312
+AsamiFSM.v_x :  -1.0
+Action Model :  [[-0.09287298833997504], [1.3875388572895204], [-0.3206021940360415], [-0.828687135745497]]
+Sensor Model :  [[-28.81820381545913], [0.7643481935920136], [-0.0066900627087012055], [1.983231272964514e-05]]
+VISION FRAME RATE: 29.9904
+MOTION FRAME RATE: 99.7466
+The walking engine is switching to stepping! 142397
+The walking engine is switching to stand! 144420
+Asami: 63.3333333333 -1.79631019663 -2.20592778944
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09073540676916281], [1.3427895888856085], [-0.3350437351155193], [-0.6896110200435999]]
+Sensor Model :  [[-22.252193129861553], [0.5721408620967736], [-0.004855267697561505], [1.4123168813657931e-05]]
+VISION FRAME RATE: 29.9904
+The walking engine is switching to stepping! 146568
+The walking engine is switching to stand! 148594
+The walking engine is switching to stepping! 150730
+Asami: 67.5 -1.36294725035 -1.41096195161
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09297731935704334], [1.351335854379748], [-0.2889107455755777], [-0.6542006697766709]]
+Sensor Model :  [[-21.93658228424465], [0.5631568425833109], [-0.004771675864624125], [1.386887887810679e-05]]
+Asami: 74.9655172414 -0.850825193811 -0.692372888431
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09444305208089077], [1.356923289442662], [-0.2587496087036527], [-0.6310498522871768]]
+Sensor Model :  [[-21.86639675959941], [0.5594949890073906], [-0.004723656557008349], [1.3685607532808175e-05]]
+VISION FRAME RATE: 29.9892
+MOTION FRAME RATE: 99.7194
+The walking engine is switching to stand! 152763
+The walking engine is switching to stepping! 154851
+Asami: 76.5142857143 -0.404645048365 -0.580941644012
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09233646288783603], [1.3488928824463144], [-0.30209797907892266], [-0.6643228093141857]]
+Sensor Model :  [[-22.08313908027867], [0.5675300263579288], [-0.004813872785034645], [1.4000913571405281e-05]]
+VISION FRAME RATE: 29.9869
+The walking engine is switching to stand! 156894
+The walking engine is switching to stepping! 159012
+The walking engine is switching to stand! 161067
+Asami: 95.8888888889 0.131848318836 0.418820718445
+AsamiFSM.v_x :  0.6
+Action Model :  [[-0.09512654970417245], [1.3595288112567303], [-0.24468492621986115], [-0.6202542082564406]]
+Sensor Model :  [[-21.96447861780871], [0.5662503400130845], [-0.004827318823210192], [1.4122843858856149e-05]]
+VISION FRAME RATE: 29.7924
+
