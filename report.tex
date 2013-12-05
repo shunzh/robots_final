@@ -59,9 +59,9 @@ the range of velocity be $[-2a, 2a]$ (positive velocities mean going
 forward, and negative ones mean going backward), and in every step the
 agent chooses an action uniformly random.  Then, the expected absolute
 velocity is $a$. Assume the agent would ``bump into'' the boundary of
-$0$ and stays there if taking actions of going backward. The expected
-\textit{moving forward} steps needed to take to reach distance $n$ is
-$\frac{n}{a}$. This forms a \textit{random walk}
+$0$ and stays there if it tries to go backward from position $0$. The
+expected \textit{moving forward} steps needed to take to reach
+distance $n$ is $\frac{n}{a}$. This forms a \textit{random walk}
 \cite{motwani1995randomized} problem. The expected steps needed to
 take to reach distance $n$ is $O(n^2)$. This concludes that, if an
 agent takes random actions in an unkown domain, it's likely that the
