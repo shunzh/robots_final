@@ -35,8 +35,7 @@ data for that action \ldots  But another possible reason  an action
 could be causing problems is because the action model function being
 fit, with the degrees of freedom that it has, just fits to a function
 that's not especially accurate for that action''. This would be a
-problem in degree selection in the polynomial regression, which is
-discussed in \cite{IJAIT08-stronger}. In this report, I'll give our
+problem in degree selection in the polynomial regression \cite{IJAIT08-stronger}. In this report, I'll give our
 action model proper degrees of freedom. So, if the action model is
 inconsistent, the reason should be that either there are too few data
 gathered to make consistency happen, or the data gathered are too
@@ -48,12 +47,12 @@ The action selection is even necessary in some environment. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effect
 the actions -- for example, some actions would make it go forward, and
 others make it go backward -- while the robot does not. So to explore
-the environment, we make the robot walk forward and walk backward
+the environment, we make the robot walk forward and backward
 alternatively to explore the state space. However, these the actions
-may be totally unknown.  If the agent still chooses actions uniformly
+may be totally unknown.  If the agent still chooses the actions uniformly
 random, then exploration would be low effecient.
 
-For example we consider 1-dimensional walk. Let the world be in the
+For example, we consider 1-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
 the range of velocity be $[-2a, 2a]$ (positive velocities mean going
 forward, and negative ones mean going backward), and in every step the
@@ -70,7 +69,7 @@ agent would restrict itself in a small sub-domain.
 \section{Literature Review}
 
 In the perspective of model-adaptive agents \cite{maes1993modeling},
-This solves the problem of \textit{action selection}, as it
+this tries to solve the problem of \textit{action selection}, as it
 accelerates the progress towards its goal - consistency between action
 model and transition model. This also solves the problem of
 \textit{learning from experience}, as the inconsistency is an
@@ -100,7 +99,7 @@ data gathered at that action.
 Additionally, there is an assumption in \cite{CSJ06} that there is a
 mapping from action to the difference of state, i.e., $A \rightarrow
 \Delta S$.  This is true in robot motion. So it's possible to learn
-the difference in the observation, when the action is given. This is
+the difference of the states, when an action is given. This is
 exactly how the task is designed in \cite{ICDL10-hester}. If this is
 not true, so that $S \times A \rightarrow S$ is the best we can
 estimate, this would become more challenging but still possibly to be
@@ -114,7 +113,7 @@ they're using very different approach. They assume that one model,
 usually the sensor model, is well calibrated. The data are represented
 as either statistics \cite{And_learningand} or instances
 \cite{LNAI2007-ahmadi}. These would be further analyzed and compared
-with our approach in the dicusssion.
+with our approach in Section~\ref{sec:dis}.
 
 \section{Proposed Algorithm}
 
@@ -142,7 +141,7 @@ with our approach in the dicusssion.
     \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
         \State $action \gets$ the action such that $samples[action]$ has the largest variance
     \Else
-        \State $action \gets$ appropriate action for state exploration
+        \State $action \gets$ appropriate action for state exploration \label{asa:actSel2}
     \EndIf
 \EndFunction
 \end{algorithmic}
@@ -151,8 +150,8 @@ with our approach in the dicusssion.
 In this section, I propose an algorithm, which I call it strong ASAMI,
 that makes the agent choose action in a computationally cheap way.
 This can be applied when there is no prior domain knowledge about
-the action model. The idea is that we devide the learning into two
-phases. The agent leans actions first and learns the state space
+the action model. The idea is that we devide the learning process into two
+phases. The agent learns the actions first and learns the state space
 later. In the frist phase, it chooses the action with least confidence
 to learn. In the second phase, it uses the actions it learned to
 explore the environment.
@@ -166,13 +165,15 @@ initialization, as the variance for the sample list first represents
 the error of our inital model.
 
 In each iteration , update (Line~\ref{asa:update}) is called to update
-the knowledge of action effects. When the robot needs to decide which
+the knowledge of the action effects. When the robot needs to decide which
 is the next action to take, getAction (Line~\ref{asa:getAct}) is
 called.
 
-The action selection strategy in phase 2 is quite vague. However, this
-is up to the agent how to plan to traverse the state space. For
-example, it might want to keep trying actions with positive $\Delta
+The action selection strategy in phase 2 (Line~\ref{asa:actSel2}) is
+quite vague. However, this is up to the agent how to plan to traverse
+the state space. For example, it might want to keep trying actions
+with positive $\Delta state$. When it observes no state changes after
+executing such action, then it tries actions with negative $\Delta
 state$.
 
 \section{Experiments}
@@ -256,12 +257,21 @@ beacon, so that they can be plotted in a same magnitude).}
 \label{fig:obs_strong}
 \end{figure}
 
-Strong ASAMI is applied in this experiment. The Nao doesn't have the
-knowledge of which action guarantees to make it walk forward or
-backward. The results are in Figure~\ref{fig:obs_strong}.
+Strong ASAMI is applied in this experiment. The assumption is
+different from the previous ones - Nao doesn't have the knowledge of
+which action guarantees to make it walk forward or backward. The
+results are in Figure~\ref{fig:obs_strong}. It can be told from the
+beacon height that the robot tries different actions first (within
+1,500 iterations) and then move forward and backward to explore the
+state space.
 
 \section{Discussion and Conclusion}
 \label{sec:dis}
+
+Another intented goal is to show that covergence in
+Figure~\ref{fig:obs_strong} should be faster than in previous
+experiments. Actually, the difference is not significant, at least for
+1-dimensional environment.
 
 It's possible that learning each discrete action independently would
 have a better performance. Though it is interesting to estimate what
