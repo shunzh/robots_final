@@ -114,43 +114,29 @@ they're using very different approach. They assume that one model,
 usually the sensor model, is well calibrated. The data are represented
 as either statistics \cite{And_learningand} or instances
 \cite{LNAI2007-ahmadi}. These would be further analyzed and compared
-with our approach in section \ref{sec:dis}.
+with our approach in the dicusssion.
 
 \section{Proposed Algorithm}
 
-In this section, I propose an algorithm, called Strong ASAMI, that
-makes the agent choose action in a computationally cheap way. This can
-be applied when there is no prior domain knowledge about them. The
-idea is that we devide the learning into two phases. The agent leanrs
-actions first and learns the state space later. In the frist
-phase, it chooses the action with least confidence to learn. In the
-second phase, it uses the actions it learned to explore the
-environment.
-
-Two essential functions are presented in Algorithm~\ref{alg:asami}. In
-each iteration (frame for Nao), \textsc{update} is called to update
-the knowledge on action effects. When the robot needs to decide which
-is the next action to take, \textsc{getAction} is called.
-
-The action selection strategy in phase 2 is quite vague. However, this
-is up to the agent how to plan to traverse the state space. For
-example, it might want to keep trying actions with positive $\Delta
-Observation$ so that before reaching a boundary, and then go the
-reverse way.
-
-\begin{algorithm*}[t]
+\begin{algorithm*}
 \caption{Strong ASAMI}\label{alg:asami}
-\begin{algorithmic}
+\begin{algorithmic}[1]
 \Function{initialize}{$rangeOfActions$}
     \State $actions \gets$ discretified $rangeOfActions$
     \For{$action$ in $actions$}
-        $samples[action] \gets \{\}$ \Comment{This will contain
-	observations when $action$ is done}
+        \State $samples[action] \gets \{\}$ \label{asa:actInit}
+	\Comment{Initialize a sample set for each action}
+        \State $s \gets A_0(action)$
+	\State push $s$ to $samples[action]$
+	\Comment{add the prediction by the initial action model}
     \EndFor
 \EndFunction
 \\
-\Function{getAction}{} \Comment{This is called when the robot needs to
-decide an action}
+\Function{update}{$action, \Delta state$} \label{asa:update}
+    \State add $\Delta state$ to $samples[action]$
+\EndFunction
+\\
+\Function{getAction}{} \label{asa:getAct}
 \State $trials\gets 0$
     \While {True}
         \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
@@ -161,17 +147,43 @@ decide an action}
         \State increase $trials$
     \EndWhile
 \EndFunction
-\\
-\Function{update}{$action, \Delta observation$} \Comment{This is called when
-each observation is retrieved.}
-    \State add $\Delta bservation$ to $samples[action]$ \Comment{It's
-    assumed that the change of observation is correlated to the
-    action, not the absolute observation.}
-\EndFunction
 \end{algorithmic}
 \end{algorithm*}
 
+In this section, I propose an algorithm, which I call it strong ASAMI,
+that makes the agent choose action in a computationally cheap way.
+This can be applied when there is no prior domain knowledge about
+them. The idea is that we devide the learning into two phases. The
+agent leans actions first and learns the state space later. In the
+frist phase, it chooses the action with least confidence to learn. In
+the second phase, it uses the actions it learned to explore the
+environment.
+
+Some essential functions are presented in Algorithm~\ref{alg:asami}.
+In initialization, a sample list is initialized for each action
+(Line~\ref{asa:actInit}). $A_0$ is the initial action model (a roughly
+correct action model we have), and its prediction for each action is
+put to the corresponding sample list.  This is a useful
+initialization, as the variance for the sample list first represents
+the error of our inital model.
+
+In each iteration , update (Line~\ref{asa:update}) is called to update
+the knowledge of action effects. When the robot needs to decide which
+is the next action to take, getAction (Line~\ref{asa:getAct}) is
+called.
+
+The action selection strategy in phase 2 is quite vague. However, this
+is up to the agent how to plan to traverse the state space. For
+example, it might want to keep trying actions with positive $\Delta
+state$ so that before reaching a boundary, and then go the
+reverse way.
+
 \section{Experiments}
+
+The plan for the experimental evaluation is that, first, I test ASAMI
+in a toy domain. I only naively implemented action model and sensor
+model. Then, I tried to make it walk on Nao. I finally compared the
+performance of ASAMI and proposed Strong ASAMI.
 
 \subsection{Test in Simulator}
 
@@ -179,32 +191,66 @@ each observation is retrieved.}
 \centering
 \includegraphics[width=\columnwidth]{simResult.png}
 \caption{The Simulator.}
-\label{fig:fuelworld}
+\label{fig:sim}
 \end{figure}
-
-
-$T\_START$ = 10. $\lambda$ = 0.2. 
 
 Action model and sensor model are both assumed to be cubic functions.
 We have four parameters to estimate for each model.
 
-\subsection{Test on Nao}
+\subsection{Test on Nao: First Attempt}
 
-The challenges are that beacon height is too noisy.
+The challenges are that beacon height is too noisy. The height
+returned by the beacon detector could be noisy, as the observed image
+can be blur. The real walking velocity can be different from what is
+set. The result is in Figure~\ref{fig:demo}.
 
-\begin{figure}[h]
+Each iteration is one frame on the Nao. Observation is retrieved and
+ASAMI is updated in each iteration. It can be told from the beacon
+height that the robot walks forward and backward two times, and then
+kidnapped from a further point to a closer point to the beacon in
+around 3,500 iteration.
+
+\begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
 observation comes continuously (30 frames per second). Everytime the
 robot changes from walking forward to warking backward (when the
 height the beacon turns to decreasing). It's kidnapped at around 3,500
-step.  (The colors are different from those in real-time plotting in
-class)}
-
-\label{fig:fuelworld}
+step.}
+\label{fig:demo}
 \end{figure}
 
+\subsection{Test on Nao: Second Attempt}
+
+I later noted that making Nao observe while walking is not necessary
+(though interesting). So I made the Nao observe only when standing.
+The performance is that, the Nao takes an action, and then walk, and
+then stands and looks at the beacon. It keeps repeating this sequence.
+Also, the height of beacon in the figure is the average of the
+observed beacon heights in the standing phase. The result is in
+Figure~\ref{fig:obs}. Clearly, as there are less noise in the
+observation, ASAMI has a better learning performance.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{out_obs.png}
+\caption{I re-scaled the height of beacon, so that they can be
+plotted in a same magtitude.}
+\label{fig:obs}
+\end{figure}
+
+\subsection{Test on Nao: using Strong ASAMI}
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{out_strong.png}
+\caption{I re-scaled the height of beacon, so that they can be
+plotted in a same magtitude.}
+\label{fig:obs_strong}
+\end{figure}
+
+The results are in Figure~\ref{fig:obs_strong}.
 
 \section{Discussion and Conclusion}
 \label{sec:dis}
