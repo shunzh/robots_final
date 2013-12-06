@@ -61,11 +61,11 @@ agent chooses an action uniformly random.  Then, the expected absolute
 velocity is $a$. Assume the agent would ``bump into'' the boundary of
 $0$ and stays there if it tries to go backward from position $0$. The
 expected \textit{moving forward} steps needed to take to reach
-distance $n$ is $\frac{n}{a}$. This forms a \textit{random walk}
+position $n$ from $0$ is $\frac{n}{a}$. This forms a \textit{random walk}
 \cite{motwani1995randomized} problem. The expected steps needed to
 take to reach distance $n$ is $O(n^2)$. This concludes that, if an
 agent takes random actions in an unkown domain, it's likely that the
-agent would confine itself in a small domain.
+agent would restrict itself in a small sub-domain.
 
 \section{Literature Review}
 
@@ -122,6 +122,7 @@ with our approach in the dicusssion.
 \caption{Strong ASAMI}\label{alg:asami}
 \begin{algorithmic}[1]
 \Function{initialize}{$rangeOfActions$}
+    \State $trials\gets 0$
     \State $actions \gets$ discretified $rangeOfActions$
     \For{$action$ in $actions$}
         \State $samples[action] \gets \{\}$ \label{asa:actInit}
@@ -134,18 +135,15 @@ with our approach in the dicusssion.
 \\
 \Function{update}{$action, \Delta state$} \label{asa:update}
     \State add $\Delta state$ to $samples[action]$
+    \State increase $trials$
 \EndFunction
 \\
 \Function{getAction}{} \label{asa:getAct}
-\State $trials\gets 0$
-    \While {True}
-        \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
-            \State $action \gets$ the action such that $samples[action]$ has the largest variance
-        \Else
-            \State $action \gets$ appropriate action for state exploration
-        \EndIf
-        \State increase $trials$
-    \EndWhile
+    \If {$trials\leq$ ACTION\_LEARNING\_TRIALS}
+        \State $action \gets$ the action such that $samples[action]$ has the largest variance
+    \Else
+        \State $action \gets$ appropriate action for state exploration
+    \EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm*}
@@ -153,11 +151,11 @@ with our approach in the dicusssion.
 In this section, I propose an algorithm, which I call it strong ASAMI,
 that makes the agent choose action in a computationally cheap way.
 This can be applied when there is no prior domain knowledge about
-them. The idea is that we devide the learning into two phases. The
-agent leans actions first and learns the state space later. In the
-frist phase, it chooses the action with least confidence to learn. In
-the second phase, it uses the actions it learned to explore the
-environment.
+the action model. The idea is that we devide the learning into two
+phases. The agent leans actions first and learns the state space
+later. In the frist phase, it chooses the action with least confidence
+to learn. In the second phase, it uses the actions it learned to
+explore the environment.
 
 Some essential functions are presented in Algorithm~\ref{alg:asami}.
 In initialization, a sample list is initialized for each action
@@ -175,15 +173,17 @@ called.
 The action selection strategy in phase 2 is quite vague. However, this
 is up to the agent how to plan to traverse the state space. For
 example, it might want to keep trying actions with positive $\Delta
-state$ so that before reaching a boundary, and then go the
-reverse way.
+state$.
 
 \section{Experiments}
 
 The plan for the experimental evaluation is that, first, I test ASAMI
 in a toy domain. I only naively implemented action model and sensor
-model. Then, I tried to make it walk on Nao. I finally compared the
-performance of ASAMI and proposed Strong ASAMI.
+model. Then, I made ASAMI and Strong ASAMI work on Nao.
+
+Action model and sensor model are both assumed to be cubic functions.
+We have four parameters to estimate for each model. The initial action
+model $A_0$ is defined to be $A_0(c) = c$.
 
 \subsection{Test in Simulator}
 
@@ -194,15 +194,18 @@ performance of ASAMI and proposed Strong ASAMI.
 \label{fig:sim}
 \end{figure}
 
-Action model and sensor model are both assumed to be cubic functions.
-We have four parameters to estimate for each model.
+The actions in the simulator are simply walking backward or foreward.
+The sensor model computes the height of the beacon according to the
+current state. As there is no noise in the simulator, the results show
+that learning on both models converge quickly. The result is in
+Figure~\ref{fig:sim}.
 
 \subsection{Test on Nao: First Attempt}
 
-The challenges are that beacon height is too noisy. The height
-returned by the beacon detector could be noisy, as the observed image
-can be blur. The real walking velocity can be different from what is
-set. The result is in Figure~\ref{fig:demo}.
+The challenges when making ASAMI walk on Nao are that beacon height is
+too noisy. The height returned by the beacon detector could be noisy,
+as the observed image can be blur. The real walking velocity can be
+different from what is set. The result is in Figure~\ref{fig:demo}.
 
 Each iteration is one frame on the Nao. Observation is retrieved and
 ASAMI is updated in each iteration. It can be told from the beacon
@@ -214,43 +217,48 @@ around 3,500 iteration.
 \centering
 \includegraphics[width=\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
-observation comes continuously (30 frames per second). Everytime the
-robot changes from walking forward to warking backward (when the
-height the beacon turns to decreasing). It's kidnapped at around 3,500
-step.}
+observation comes continuously (30 frames per second). It's kidnapped
+at around 3,500 step.}
 \label{fig:demo}
 \end{figure}
 
 \subsection{Test on Nao: Second Attempt}
 
-I later noted that making Nao observe while walking is not necessary
-(though interesting). So I made the Nao observe only when standing.
-The performance is that, the Nao takes an action, and then walk, and
-then stands and looks at the beacon. It keeps repeating this sequence.
-Also, the height of beacon in the figure is the average of the
-observed beacon heights in the standing phase. The result is in
-Figure~\ref{fig:obs}. Clearly, as there are less noise in the
-observation, ASAMI has a better learning performance.
-
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{out_obs.png}
-\caption{I re-scaled the height of beacon, so that they can be
-plotted in a same magtitude.}
+\caption{Testing of ASAMI on Nao. The observation comes only when it's
+in standing phase. So there is less update in the observation, and
+less noise compared to Figre~\ref{fig:demo} (I re-scaled the height of
+beacon, so that they can be plotted in a same magnitude).}
 \label{fig:obs}
 \end{figure}
+
+I later noted that making Nao observe while walking is not necessary
+(though interesting). So I made the Nao observe only when standing.
+The performance is that, the Nao takes an action, and then walk, and
+then stands still to look at the beacon. It keeps repeating this
+sequence.  Also, the height of beacon in the figure is the average of
+the observed beacon heights in the standing phase. The result is in
+Figure~\ref{fig:obs}. Clearly, as there are less noise in the
+observation, ASAMI has a better learning performance.
 
 \subsection{Test on Nao: using Strong ASAMI}
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{out_strong.png}
-\caption{I re-scaled the height of beacon, so that they can be
-plotted in a same magtitude.}
+\caption{Testing of Strong ASAMI on Nao. The observation comes only
+when it's in standing phase - same as Figure~\ref{fig:obs}. The robot
+tries to learn the action model first in the first 1,500 iterations,
+then continues to explore the state space (I re-scaled the height of
+beacon, so that they can be plotted in a same magnitude).}
 \label{fig:obs_strong}
 \end{figure}
 
-The results are in Figure~\ref{fig:obs_strong}.
+Strong ASAMI is applied in this experiment. The Nao doesn't have the
+knowledge of which action guarantees to make it walk forward or
+backward. The results are in Figure~\ref{fig:obs_strong}.
 
 \section{Discussion and Conclusion}
 \label{sec:dis}
