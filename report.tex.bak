@@ -50,7 +50,7 @@ others make it go backward -- while the robot does not. So to explore
 the environment, we make the robot walk forward and backward
 alternatively to explore the state space. However, these the actions
 may be totally unknown.  If the agent still chooses the actions uniformly
-random, then exploration would be low efficient.
+random, then exploration would be low effecient.
 
 For example, we consider 1-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
@@ -63,7 +63,7 @@ expected \textit{moving forward} steps needed to take to reach
 position $n$ from $0$ is $\frac{n}{a}$. This forms a \textit{random walk}
 \cite{motwani1995randomized} problem. The expected steps needed to
 take to reach distance $n$ is $O(n^2)$. This concludes that, if an
-agent takes random actions in an unknown domain, it's likely that the
+agent takes random actions in an unkown domain, it's likely that the
 agent would restrict itself in a small sub-domain.
 
 \section{Literature Review}
@@ -122,7 +122,7 @@ with our approach in Section~\ref{sec:dis}.
 \begin{algorithmic}[1]
 \Function{initialize}{$rangeOfActions$}
     \State $trials\gets 0$
-    \State $actions \gets$ discretized $rangeOfActions$
+    \State $actions \gets$ discretified $rangeOfActions$
     \For{$action$ in $actions$}
         \State $samples[action] \gets \{\}$ \label{asa:actInit}
 	\Comment{Initialize a sample set for each action}
@@ -150,9 +150,9 @@ with our approach in Section~\ref{sec:dis}.
 In this section, I propose an algorithm, which I call it strong ASAMI,
 that makes the agent choose action in a computationally cheap way.
 This can be applied when there is no prior domain knowledge about
-the action model. The idea is that we divide the learning process into two
+the action model. The idea is that we devide the learning process into two
 phases. The agent learns the actions first and learns the state space
-later. In the first phase, it chooses the action with least confidence
+later. In the frist phase, it chooses the action with least confidence
 to learn. In the second phase, it uses the actions it learned to
 explore the environment.
 
@@ -162,7 +162,7 @@ In initialization, a sample list is initialized for each action
 correct action model we have), and its prediction for each action is
 put to the corresponding sample list.  This is a useful
 initialization, as the variance for the sample list first represents
-the error of our initial model.
+the error of our inital model.
 
 In each iteration , update (Line~\ref{asa:update}) is called to update
 the knowledge of the action effects. When the robot needs to decide which
@@ -196,7 +196,7 @@ model $A_0$ is defined to be $A_0(c) = c$.
 \label{fig:sim}
 \end{figure}
 
-The actions in the simulator are simply walking backward or froward.
+The actions in the simulator are simply walking backward or foreward.
 The sensor model computes the height of the beacon according to the
 current state. As there is no noise in the simulator, the results show
 that learning on both models converge quickly and nicely. The result
@@ -266,7 +266,7 @@ beacon height that the robot tries different actions first (within
 1,500 iterations) and then move forward and backward to explore the
 state space.
 
-Another intended goal is to show that convergence in
+Another intented goal is to show that covergence in
 Figure~\ref{fig:obs_strong} should be faster than in previous
 experiments. Actually, the difference is not significant, at least for
 1-dimensional environment.
@@ -286,7 +286,7 @@ updates could have global effects. This is especially harmful in a
 noisy environment.
 
 The action model and sensor model are comparatively easy to learn for
-a 1-dimensional environment. So expecting improvement based on the
+a 1-dimenstional environment. So expecting improvement based on the
 result of ASAMI algorithm maybe not realistic. However, Strong ASAMI
 does show its power in the environment where action learning is
 :q
