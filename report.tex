@@ -43,14 +43,14 @@ make consistency happen, or the data gathered are too noisy.
 
 \hfill
 
-The action selection is even necessary in some environment. The
+The action selection is even necessary in some environments. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effect
-the actions -- for example, some actions would make it go forward, and
-others make it go backward -- while the robot does not. So to explore
-the environment, we make the robot walk forward and backward
-alternatively to explore the state space. However, these the actions
-may be totally unknown.  If the agent still chooses the actions uniformly
-random, then exploration would be low efficient.
+the actions -- for example, some actions would make the robot go
+forward, and others make it go backward -- while the robot does not.
+So to explore the environment, we make the robot walk forward and
+backward alternatively to explore the state space. However, these 
+actions may be completely unknown.  If the agent still chooses the
+actions uniformly random, then exploration would be low efficient.
 
 For example, we consider 1-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
@@ -147,8 +147,8 @@ with our approach in Section~\ref{sec:dis}.
 \end{algorithmic}
 \end{algorithm*}
 
-In this section, I propose an algorithm, which I call it strong ASAMI,
-that makes the agent choose action in a computationally cheap way.
+In this section, I propose an algorithm, which I call it Strong ASAMI,
+that makes the agent choose actions in a computationally cheap way.
 This can be applied when there is no prior domain knowledge about
 the action model. The idea is that we divide the learning process into two
 phases. The agent learns the actions first and learns the state space
@@ -160,13 +160,14 @@ Some essential functions are presented in Algorithm~\ref{alg:asami}.
 In initialization, a sample list is initialized for each action
 (Line~\ref{asa:actInit}). $A_0$ is the initial action model (a roughly
 correct action model we have), and its prediction for each action is
-put to the corresponding sample list.  This is a useful
-initialization, as the variance for the sample list first represents
-the error of our initial model.
+pushed to the corresponding sample list.  This is a useful
+initialization, as the variance of the sample list would represent
+the error of our initial model, when the first observed sample is
+added.
 
 In each iteration , update (Line~\ref{asa:update}) is called to update
-the knowledge of the action effects. When the robot needs to decide which
-is the next action to take, getAction (Line~\ref{asa:getAct}) is
+the knowledge of the action effects. When the robot needs to decide
+which is the next action to take, getAction (Line~\ref{asa:getAct}) is
 called.
 
 The action selection strategy in phase 2 (Line~\ref{asa:actSel2}) is
@@ -174,25 +175,31 @@ quite vague. However, this is up to the agent how to plan to traverse
 the state space. For example, it might want to keep trying actions
 with positive $\Delta state$. When it observes no state changes after
 executing such action, then it tries actions with negative $\Delta
-state$. Then the robot should have the performance of walking forward
-and backward in the domain.
+state$. Then the robot should finally have the performance of walking
+forward and backward in the domain, even without a prior domain
+knowledge of the actions.
 
 \section{Experiments}
 
 The plan for the experimental evaluation is that, first, I test ASAMI
-in a toy domain. I only naively implemented action model and sensor
-model. Then, I made ASAMI and Strong ASAMI work on Nao.
+in a toy domain. I only naively implemented the action model and the
+sensor model. Then, I made ASAMI and Strong ASAMI work on Nao.
 
 Action model and sensor model are both assumed to be cubic functions.
-We have four parameters to estimate for each model. The initial action
-model $A_0$ is defined to be $A_0(c) = c$.
+There are four parameters to be estimated for each model. The initial
+action model $A_0$ is defined to be $A_0(c) = c$.
+
+Same as \cite{CSJ06}, in the first $T\_START$ iterations, the sensor
+model is being learned by the action model, but not used to update
+$w_s$. So in the figures $w_s$ doesn't change at the beginning. This
+is important for the algorithm to converge.
 
 \subsection{Test in Simulator}
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{simResult.png}
-\caption{The Simulator.}
+\caption{Testing of ASAMI in the Simulator. $w_s$}
 \label{fig:sim}
 \end{figure}
 
@@ -203,24 +210,24 @@ that learning on both models converge quickly and nicely. The result
 is in Figure~\ref{fig:sim}.
 
 \subsection{Test on Nao: First Attempt}
+\label{nao:1st}
 
 The challenges when making ASAMI walk on Nao are that beacon height is
 too noisy. The height returned by the beacon detector could be noisy,
 as the observed image can be blur. The real walking velocity can be
 different from what is set. The result is in Figure~\ref{fig:demo}.
 
-One iteration is one frame on the Nao. Observation is retrieved and
-ASAMI is updated in each iteration. It can be told from the beacon
-height that the robot walks forward and backward two times, and then
-kidnapped from a further point to a closer point to the beacon in
-around 3,500 iteration.
+Observation is retrieved and ASAMI is updated in each iteration. It
+can be told from the beacon height that the robot walks forward and
+backward two times, and then kidnapped from a further point to a
+closer point to the beacon in around 3,500 iteration.
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
-observation comes continuously (30 frames per second). It's kidnapped
-at around 3,500 step.}
+observation comes continuously, on average of 30 frames (iterations)
+per second. It's kidnapped at around 3,500th iteration.}
 \label{fig:demo}
 \end{figure}
 
@@ -231,19 +238,27 @@ at around 3,500 step.}
 \includegraphics[width=\columnwidth]{out_obs.png}
 \caption{Testing of ASAMI on Nao. The observation comes only when it's
 in standing phase. So there is less update in the observation, and
-less noise compared to Figre~\ref{fig:demo} (I re-scaled the height of
-beacon, so that they can be plotted in a same magnitude).}
+less noise compared to Figre~\ref{fig:demo}. One iteration of ASAMI
+corresponds to one update in the figure, which corresponding to many
+frames on Nao (I re-scaled the height of beacon, so that they can be
+plotted in a same magnitude).}
 \label{fig:obs}
 \end{figure}
 
-I later noted that making Nao observe while walking is not necessary
-(though interesting). So I made the Nao observe only when standing.
-The performance is that, the Nao takes an action, and then walk, and
-then stands still to look at the beacon. It keeps repeating this
-sequence.  Also, the height of beacon in the figure is the average of
-the observed beacon heights in the standing phase. The result is in
-Figure~\ref{fig:obs}. Clearly, as there are less noise in the
-observation, ASAMI has a better learning performance.
+I later realized that making Nao observe while walking is not
+necessary (though interesting). So I made the Nao observe only when
+standing.  The performance is that, the Nao takes an action, and then
+walk, and then stands still to look at the beacon. It keeps repeating
+this sequence. The result is in Figure~\ref{fig:obs}.  The height of
+beacon in the figure is the average of the observed beacon heights in
+the standing phase. Note that the x label in Figure~\ref{fig:obs} is
+different from that in Figure~\ref{fig:demo}. In Figure~\ref{fig:demo},
+one iteration of ASAMI is exactly one frame on Nao. Here, one
+iteration of ASAMI takes many frames on Nao (one walking and one
+standing phase).
+
+Clearly, as there are less noise in the observation, ASAMI has a
+better learning performance.
 
 \subsection{Test on Nao: using Strong ASAMI}
 
@@ -260,14 +275,13 @@ beacon, so that they can be plotted in a same magnitude).}
 
 Strong ASAMI is applied in this experiment. The assumption is
 different from the previous ones - Nao doesn't have the knowledge of
-which action guarantees to make it walk forward or backward. The
-results are in Figure~\ref{fig:obs_strong}. It can be told from the
-beacon height that the robot tries different actions first (within
-1,500 iterations) and then move forward and backward to explore the
-state space.
+the actions. The results are in Figure~\ref{fig:obs_strong}. It can be
+told from the beacon height that the robot tries different actions
+first (within 1,500 iterations, or frames) and then move forward and
+backward to explore the state space.
 
 Another intended goal is to show that convergence in
-Figure~\ref{fig:obs_strong} should be faster than in previous
+Figure~\ref{fig:obs_strong} should be faster than that in previous
 experiments. Actually, the difference is not significant, at least for
 1-dimensional environment.
 
@@ -275,21 +289,28 @@ experiments. Actually, the difference is not significant, at least for
 \label{sec:dis}
 
 It's possible that learning each discrete action independently would
-have a better performance. Though it is interesting to estimate what
-the most likely continuous model, expressed by polynomial function, by
-the samples. It has several constraints. First, degree selection
-should be determined, possibly using methods in
-\cite{IJAIT08-stronger}. But the model many not be a small-dimensional
-polynomial, so there might be too many parameters to estimate. Second,
-the inherent drawback of function approximation method is that local
-updates could have global effects. This is especially harmful in a
-noisy environment.
+have a better performance. That would be the same metric as
+\cite{LNAI2007-ahmadi}. Though it is interesting to estimate what
+the most likely continuous model is, expressed by polynomial function.
+It has several constraints. First, degree selection should be
+determined, possibly using methods in \cite{IJAIT08-stronger}. But the
+model may not be a small-dimensional polynomial, so there might be
+too many parameters to estimate. Second, the inherent drawback of
+function approximation method is that local updates could have global
+effects. This is especially harmful in a noisy environment.
+
+The idea of action trials is very similar to the idea of N-bandit
+problem \cite{vermorel2005multi}. Though we are not going to find an
+optimal action. The goal should be the smallest variance of all the
+actions. To solve this problem, I used a very naive approach - always
+choosing an action with the least variance. However, the actions are
+not mutually independent - they are picked up from a continuous space.
+So getting one sample of an action can help us know its neighborhood.
 
 The action model and sensor model are comparatively easy to learn for
 a 1-dimensional environment. So expecting improvement based on the
-result of ASAMI algorithm maybe not realistic. However, Strong ASAMI
+result of ASAMI algorithm may not be realistic. However, Strong ASAMI
 does show its power in the environment where action learning is
-:q
 necessary.
 
 %=====================================================================
