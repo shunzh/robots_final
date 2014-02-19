@@ -48,9 +48,11 @@ However, robots can be learn action model and sensor model
 simultaneously without any prior knowledge. One example is the ASAMI
 algorithm \cite{CSJ06}. There are two estimates of the current state
 of the robot --- $W_s$, the state estimated by the sensor model, and
-$W_a$, the state estimated by the action model. They are used to
-update each other in the learning process until they converge. This
-idea is illustrated in Figure~\ref{fig:relation}.
+$W_a$, the state estimated by the action model. They are both assumed
+to be polynomial functions. The robot needs to estimate the parameters
+of them. In one ASAMI iteration, the action model is used to update
+the sensor model, and also vice versa. This is called bootstrapping.
+This idea is illustrated in Figure~\ref{fig:relation}.
 
 \begin{figure}
 \centering
@@ -233,7 +235,7 @@ experiment on real robots like Nao.
 
 First, I test ASAMI in a toy domain. I only naively implemented the action
 model and the sensor model. Then, I made ASAMI and Strong ASAMI work on
-Nao. Action model and sensor model are both assumed to be cubic
+Aldebaran Nao robot. Action model and sensor model are both assumed to be cubic
 functions.  We have four parameters to estimate for each model. The
 initial action model $A_0$ is defined to be a constant function,
 $A_0(x) = c$, where c is a small random number. This is used to train
