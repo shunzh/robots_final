@@ -20,7 +20,7 @@
 
 The action model and sensor model of a robot can be learned
 simultaneously without external feedback. One example is the ASAMI
-algorithm \cite{CSJ06}. There are two estimates of the current state of the robot -
+algorithm \cite{CSJ06}. There are two estimates of the current state of the robot ---
 $w_s$, the state estimated by the sensor model, and $w_a$, the state
 estimated by the action model. These two are updated in a
 bootstrapping way. In ASAMI, actions are selected randomly
@@ -31,7 +31,7 @@ samples.  The agent doesn't know the correctness of the models. It
 only knows the consistency of them. For example, states with larger
 difference in action model and sensor model ($|W_a - W_s|$) should be
 considered as inconsistent.  Unobserved state, action pairs can be
-also assumed as inconsistent.
+also assumed to be inconsistent.
 
 The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
 possible reason the $W_a$ is wrong after a certain action is that the
@@ -46,14 +46,14 @@ proper degrees of freedom. So, if the action model is inconsistent,
 the reason should be that either there are too few data gathered to
 make consistency happen, or the data gathered are too noisy.
 
-The action selection is even necessary in some environment. The
-experiments in \cite{CSJ06} assume that \textit{we} know the effect
+Action selection is even necessary in some environment. The
+experiments in \cite{CSJ06} assume that \textit{we} know the effects of
 the actions -- for example, some actions would make the robot go
 forward, and others make it go backward -- while the robot does not.
 So to explore the environment, we make the robot walk forward and
-backward alternatively to explore the state space. However, these 
-actions may be completely unknown.  If the agent still chooses the
-actions uniformly random, then exploration would be low efficient.
+backward alternatively to explore the state space. However, 
+actions' effects may be completely unknown.  If the agent still chooes the
+actions uniformly random, then exploration would be inefficient.
 
 For example, we consider one-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
@@ -65,15 +65,15 @@ $0$ and stays there if it tries to go backward from position $0$. The
 expected \textit{moving forward} steps needed to take to reach
 position $n$ from $0$ is $\frac{n}{a}$. This forms a \textit{random walk}
 \cite{motwani1995randomized} problem. The expected steps needed to
-take to reach distance $n$ is $O(n^2)$. This concludes that, if an
-agent takes random actions in an unknown domain, it's likely that the
+take to reach distance $n$ is $O(n^2)$. This implies that, if an
+agent takes random actions in an unknown domain, it is likely that the
 agent would restrict itself in a small sub-domain.
 
 \section{Literature Review}
 
 In the perspective of model-adaptive agents \cite{maes1993modeling},
-this tries to solve the problem of \textit{action selection}, as it
-accelerates the progress towards its goal - consistency between action
+\textit{action selection} is critical problem because it
+accelerates the progress towards its goal---consistency between action
 model and transition model. This also solves the problem of
 \textit{learning from experience}, as the inconsistency is an
 essential information that can be used for further decision-making.
@@ -81,8 +81,7 @@ essential information that can be used for further decision-making.
 There is a two-dimensional version of ASAMI discussed in
 \cite{ICRA08-stronger}.  As the action space is larger in higher
 dimension, biasing on actions instead of random selection on actions
-becomes more essential. The proposed approach can be proceeded if the
-proposed modification works in one-dimensional environment.
+becomes more essential.
 
 Compared with this proposed method, some similar ideas are discussed
 in the developmental robotics literature. They call the inconsistency
@@ -152,8 +151,8 @@ with our approach in Section~\ref{sec:dis}.
 \end{algorithm*}
 
 In this section, I propose an algorithm, which I call it Strong ASAMI,
-that makes the agent choose action in a computationally cheap way.
-It keeps the essentials of ASAMI. However, Strong ASAMI can be applied
+that makes the agent choose actions in a computationally cheap way.
+It keeps the essentials of ASAMI\@. However, Strong ASAMI can be applied
 when there is no prior domain knowledge about the action model. The
 idea is that we divide the learning process into two phases. The agent
 learns the actions first and learns the state space later. In the
@@ -236,7 +235,7 @@ closer point to the beacon in around 3,500 iteration.
 \includegraphics[width=0.7\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
 observation comes continuously, on average of 30 frames (iterations)
-per second. It's kidnapped at around 3,500th iteration.}
+per second. It is kidnapped at around 3,500th iteration.}
 \label{fig:demo}
 \end{figure}
 
@@ -297,8 +296,7 @@ one-dimensional environment.
 \section{Discussion and Conclusion}
 \label{sec:dis}
 
-It's possible that learning each discrete action independently would
-<<<<<<< HEAD
+It is possible that learning each discrete action independently would
 have a better performance. That would be the same metric as
 \cite{LNAI2007-ahmadi}. Though it is interesting to estimate what
 the most likely continuous model is, expressed by polynomial function.
