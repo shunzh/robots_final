@@ -13,17 +13,56 @@
 \begin{document}
 \maketitle
 
-%\begin{abstract}
-%\end{abstract}
+\begin{abstract}
+Robot motion planning and control is essential for robots to navigate
+in the real world.
+Autonomous robots are expected to take actions to actively explore an
+environment, instead of fed by hand-tuned knowledge given by human.
+Stronger and Stone designed an algorithm, called ASAMI, which
+developes the learning efficiently. This assumes prior domain
+knowledge of the effect of the actions. However, we may not have
+access to this information in some domains. I proposed an extension on
+ASAMI which makes it overcome such drawback, to learn the actions and
+also the envrionment simutanously.
+\end{abstract}
+
+\section{Introduction}
+
+There are two critical models for robot motion---action model and
+sensor model. The action model predicts the effect of an action,
+or formally, $A \rightarrow \Delta S$, where $A$ is the action space
+and $S$ is the location space. The sensor model predicts the
+location given an observation, or formally, $O \rightarrow S$, where
+$O$ is the observation space. Traditionally, these two models are
+given by human. The robot only needs to do planning or learning for a
+higher-level goal (Figure~\ref{fig:robocup}).
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\columnwidth]{Robocup.png}
+\caption{Robots play soccer. \cite{LNAI12-Barrett}}
+\label{fig:robocup}
+\end{figure}
+
+However, robots can be learn action model and sensor model
+simultaneously without any prior knowledge. One example is the ASAMI
+algorithm \cite{CSJ06}. There are two estimates of the current state
+of the robot --- $W_s$, the state estimated by the sensor model, and
+$W_a$, the state estimated by the action model. They are used to
+update each other in the learning process until they converge. This
+idea is illustrated in Figure~\ref{fig:relation}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\columnwidth]{relation.png}
+\caption{the robot can use redundant information to learn its action
+and sensor models, revised from Figure~2 in \cite{CSJ06}.}
+\label{fig:relation}
+\end{figure}
 
 \section{Analysis of ASAMI}
 
-The action model and sensor model of a robot can be learned
-simultaneously without external feedback. One example is the ASAMI
-algorithm \cite{CSJ06}. There are two estimates of the current state of the robot ---
-$w_s$, the state estimated by the sensor model, and $w_a$, the state
-estimated by the action model. These two are updated in a
-bootstrapping way. In ASAMI, actions are selected randomly
+In ASAMI, actions are selected randomly
 in the training. However, this can be biased according to the current
 belief.  In this sense, the agent should be able to determine which
 action would lead to the most uncertain results and thus need more
@@ -41,7 +80,7 @@ could be causing problems is because the action model function being
 fit, with the degrees of freedom that it has, just fits to a function
 that's not especially accurate for that action''. This would be a
 problem in degree selection in the polynomial regression
-\cite{IJAIT08-stronger}. In this report, I'll give our action model
+\cite{IJAIT08-stronger}. In this paper, I'll give our action model
 proper degrees of freedom. So, if the action model is inconsistent,
 the reason should be that either there are too few data gathered to
 make consistency happen, or the data gathered are too noisy.
@@ -49,10 +88,11 @@ make consistency happen, or the data gathered are too noisy.
 Action selection is even necessary in some environment. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effects of
 the actions -- for example, some actions would make the robot go
-forward, and others make it go backward -- while the robot does not.
+forward, and others make it go backward -- while the robot does not
+know.
 So to explore the environment, we make the robot walk forward and
 backward alternatively to explore the state space. However, 
-actions' effects may be completely unknown.  If the agent still chooes the
+actions' effects may be completely unknown.  If the agent still chooses the
 actions uniformly random, then exploration would be inefficient.
 
 For example, we consider one-dimensional walk. Let the world be in the
@@ -93,7 +133,7 @@ inconsistency \cite{oudeyer2006discovering}. Then, a reinforcement
 learning framework can be used to plan to get to the states with the
 least global inconsistency. The authors in
 \cite{ranasinghe2008surprise} used logic rules as the model, and let
-the robot figure out why there could be a surprise. In this report, I
+the robot figure out why there could be a surprise. In this paper, I
 assume that the surprise is caused by insufficient or noisy data. So
 the surprise, or inconsistency, of an action, is simply caused by the
 data gathered at that action.
@@ -220,7 +260,7 @@ is in Figure~\ref{fig:sim}.
 \subsection{Test on Nao: First Attempt}
 \label{nao:1st}
 
-The challenges when making ASAMI walk on Nao are that beacon height is
+The challenges of making ASAMI walk on Nao are that beacon height is
 too noisy. The height returned by the beacon detector could be noisy,
 as the observed image can be blur. The real walking velocity can be
 different from what is set. The result is in Figure~\ref{fig:demo}.
@@ -316,7 +356,7 @@ not mutually independent - they are picked up from a continuous space.
 So getting one sample of an action can help us know its neighborhood.
 
 The action model and sensor model are comparatively easy to learn for
-a 1-dimensional environment. So expecting improvement based on the
+a one-dimensional environment. So expecting improvement based on the
 result of ASAMI algorithm may not be realistic. However, Strong ASAMI
 does show its power in the environment where action learning is
 necessary.
