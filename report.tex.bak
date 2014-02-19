@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 \usepackage{latexsym}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -53,9 +53,9 @@ $W_a$, the state estimated by the action model. They are both assumed
 to be polynomial functions. The robot needs to estimate the parameters
 of them. In one-dimensional scenario, the robot is required to walk
 back and forth (which clearly requires some knowledge of the actions).
-In one iteration, the action model is used to update the sensor model,
-and also vice versa. They will finally converge in a bootstrapping
-way. This idea is illustrated in Figure~\ref{fig:relation}.
+The action model is used to update the sensor model, and also vice
+versa. They will finally converge. This idea is illustrated in
+Figure~\ref{fig:relation}.
 
 \begin{figure}
 \centering
@@ -229,18 +229,17 @@ performance of walking forward and backward in the domain.
 
 \section{Experiments}
 
-I used the same setup of experiment used to evaluate ASAMI \cite{CSJ06}. The
-plan for the experimental evaluation is designed in the following way.
-The robot can walk back and forth in a one-dimensional path.
+The plan for the experimental evaluation is designed in the following
+way, the robot can walk back and forth in a one-dimensional path.
 There is a beacon placed at one end. The robot is always facing
 towards the beacon. The only observation is the height of the beacon.
 The state is the distance to the beacon (Figure~\ref{fig:env}).
 The environment could be noisy - this is inherently true when doing
-experiment on real robots.
+experiment on real robots like Nao.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\columnwidth]{env.png}
+\includegraphics[width=0.7\columnwidth]{env.png}
 \caption{The experiment. The observation is the height of the beacon.
 The state is the distance to the beacon. Nao is used instead of Aibo
 shown in this figure. \cite{CSJ06}}
@@ -307,7 +306,7 @@ per second. It is kidnapped at around 3,500th iteration.}
 \includegraphics[width=0.7\columnwidth]{out_obs.png}
 \caption{Testing of ASAMI on Nao. The observation comes only when it's
 in standing phase. So there is less update in the observation, and
-less noise compared to Figure~\ref{fig:demo}. One iteration of ASAMI
+less noise compared to Figre~\ref{fig:demo}. One iteration of ASAMI
 corresponds to one update in the figure, which corresponding to many
 frames on Nao (I re-scaled the height of beacon, so that they can be
 plotted in a same magnitude).}
