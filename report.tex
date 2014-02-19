@@ -1,4 +1,4 @@
-\documentclass[10pt]{IEEEtran}
+\documentclass[10pt]{article}
 \usepackage{latexsym}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -6,8 +6,9 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \title{Action Selection in ASAMI}
-\author{Shun Zhang}
 \date{}
+
+\linespread{1.5}
 
 \begin{document}
 \maketitle
@@ -18,15 +19,19 @@
 \section{Analysis of ASAMI}
 
 The action model and sensor model of a robot can be learned
-simultaneously without external feedback \cite{CSJ06}.  In the ASAMI
-algorithm, actions are selected randomly in the training. However,
-this can be biased according to the current belief.  In this sense,
-the agent should be able to determine which action would lead to the
-most uncertain results and thus need more samples.  The agent doesn't
-know the correctness of the models. It only knows the consistency of
-them. For example, states with larger difference in action model and
-sensor model ($|W_a - W_s|$) should be considered as inconsistent.
-Unobserved state, action pairs can be also assumed as inconsistent.
+simultaneously without external feedback. One example is the ASAMI
+algorithm \cite{CSJ06}. There are two estimates of the current state of the robot -
+$w_s$, the state estimated by the sensor model, and $w_a$, the state
+estimated by the action model. These two are updated in a
+bootstrapping way. In ASAMI, actions are selected randomly
+in the training. However, this can be biased according to the current
+belief.  In this sense, the agent should be able to determine which
+action would lead to the most uncertain results and thus need more
+samples.  The agent doesn't know the correctness of the models. It
+only knows the consistency of them. For example, states with larger
+difference in action model and sensor model ($|W_a - W_s|$) should be
+considered as inconsistent.  Unobserved state, action pairs can be
+also assumed as inconsistent.
 
 The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
 possible reason the $W_a$ is wrong after a certain action is that the
@@ -41,9 +46,7 @@ proper degrees of freedom. So, if the action model is inconsistent,
 the reason should be that either there are too few data gathered to
 make consistency happen, or the data gathered are too noisy.
 
-\hfill
-
-The action selection is even necessary in some environments. The
+The action selection is even necessary in some environment. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effect
 the actions -- for example, some actions would make the robot go
 forward, and others make it go backward -- while the robot does not.
@@ -52,7 +55,7 @@ backward alternatively to explore the state space. However, these
 actions may be completely unknown.  If the agent still chooses the
 actions uniformly random, then exploration would be low efficient.
 
-For example, we consider 1-dimensional walk. Let the world be in the
+For example, we consider one-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
 the range of velocity be $[-2a, 2a]$ (positive velocities mean going
 forward, and negative ones mean going backward), and in every step the
@@ -98,8 +101,9 @@ data gathered at that action.
 
 Additionally, there is an assumption in \cite{CSJ06} that there is a
 mapping from action to the difference of state, i.e., $A \rightarrow
-\Delta S$.  This is true in robot motion. So it's possible to learn
-the difference of the states, when an action is given. This is
+\Delta S$, where $A$ is the action space and $S$ is the state space.  This
+is true in robot motion. So it's possible to learn the difference of
+the states, when an action is given. This is
 exactly how the task is designed in \cite{ICDL10-hester}. If this is
 not true, so that $S \times A \rightarrow S$ is the best we can
 estimate, this would become more challenging but still possibly to be
@@ -148,13 +152,14 @@ with our approach in Section~\ref{sec:dis}.
 \end{algorithm*}
 
 In this section, I propose an algorithm, which I call it Strong ASAMI,
-that makes the agent choose actions in a computationally cheap way.
-This can be applied when there is no prior domain knowledge about
-the action model. The idea is that we divide the learning process into two
-phases. The agent learns the actions first and learns the state space
-later. In the first phase, it chooses the action with least confidence
-to learn. In the second phase, it uses the actions it learned to
-explore the environment.
+that makes the agent choose action in a computationally cheap way.
+It keeps the essentials of ASAMI. However, Strong ASAMI can be applied
+when there is no prior domain knowledge about the action model. The
+idea is that we divide the learning process into two phases. The agent
+learns the actions first and learns the state space later. In the
+first phase, it chooses the action with least confidence to learn. In
+the second phase, it uses the actions it learned to explore the
+environment.
 
 Some essential functions are presented in Algorithm~\ref{alg:asami}.
 In initialization, a sample list is initialized for each action
@@ -165,45 +170,49 @@ initialization, as the variance of the sample list would represent
 the error of our initial model, when the first observed sample is
 added.
 
-In each iteration , update (Line~\ref{asa:update}) is called to update
-the knowledge of the action effects. When the robot needs to decide
-which is the next action to take, getAction (Line~\ref{asa:getAct}) is
-called.
+In each iteration, \texttt{update} (Line~\ref{asa:update}) is called to update
+the knowledge of the action effects by adding new observations. When
+the robot needs to decide which is the next action to take,
+\texttt{getAction} (Line~\ref{asa:getAct}) is called.
 
 The action selection strategy in phase 2 (Line~\ref{asa:actSel2}) is
 quite vague. However, this is up to the agent how to plan to traverse
-the state space. For example, it might want to keep trying actions
-with positive $\Delta state$. When it observes no state changes after
-executing such action, then it tries actions with negative $\Delta
-state$. Then the robot should finally have the performance of walking
-forward and backward in the domain, even without a prior domain
-knowledge of the actions.
+the state space. Consider a one-dimensional environment, it might want
+to keep trying actions with positive $\Delta state$. When it observes
+no state changes after executing such action, then it tries actions
+with negative $\Delta state$. Then the robot should have the
+performance of walking forward and backward in the domain.
 
 \section{Experiments}
 
-The plan for the experimental evaluation is that, first, I test ASAMI
-in a toy domain. I only naively implemented the action model and the
-sensor model. Then, I made ASAMI and Strong ASAMI work on Nao.
+The plan for the experimental evaluation is designed in the following
+way, the robot can walk back and forth in a one-dimensional path.
+There is a beacon placed at one end. The robot is always facing
+towards the beacon. The only observation is the height of the beacon.
+The environment could be noisy - this is inherently tree when doing
+experiment on real robots like Nao.
 
-Action model and sensor model are both assumed to be cubic functions.
-There are four parameters to be estimated for each model. The initial
-action model $A_0$ is defined to be $A_0(c) = c$.
-
-Same as \cite{CSJ06}, in the first $T\_START$ iterations, the sensor
-model is being learned by the action model, but not used to update
-$w_s$. So in the figures $w_s$ doesn't change at the beginning. This
-is important for the algorithm to converge.
+First, I test ASAMI in a toy domain. I only naively implemented the action
+model and the sensor model. Then, I made ASAMI and Strong ASAMI work on
+Nao. Action model and sensor model are both assumed to be cubic
+functions.  We have four parameters to estimate for each model. The
+initial action model $A_0$ is defined to be a constant function,
+$A_0(x) = c$, where c is a small random number. This is used to train
+the state estimated by the action model, $w_a$, in the first 100
+iterations.
 
 \subsection{Test in Simulator}
 
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{simResult.png}
-\caption{Testing of ASAMI in the Simulator. $w_s$}
+\includegraphics[width=0.7\columnwidth]{simResult.png}
+\caption{The learning performance in the simulator.}
 \label{fig:sim}
 \end{figure}
 
 The actions in the simulator are simply walking backward or froward.
+It can choose from velocity of [-1, 1]. The effect of the velocity is
+exactly the change of state.
 The sensor model computes the height of the beacon according to the
 current state. As there is no noise in the simulator, the results show
 that learning on both models converge quickly and nicely. The result
@@ -222,9 +231,9 @@ can be told from the beacon height that the robot walks forward and
 backward two times, and then kidnapped from a further point to a
 closer point to the beacon in around 3,500 iteration.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{demoResult.png}
+\includegraphics[width=0.7\columnwidth]{demoResult.png}
 \caption{Testing of ASAMI on Nao during the class demo. The
 observation comes continuously, on average of 30 frames (iterations)
 per second. It's kidnapped at around 3,500th iteration.}
@@ -233,9 +242,9 @@ per second. It's kidnapped at around 3,500th iteration.}
 
 \subsection{Test on Nao: Second Attempt}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{out_obs.png}
+\includegraphics[width=0.7\columnwidth]{out_obs.png}
 \caption{Testing of ASAMI on Nao. The observation comes only when it's
 in standing phase. So there is less update in the observation, and
 less noise compared to Figre~\ref{fig:demo}. One iteration of ASAMI
@@ -262,9 +271,9 @@ better learning performance.
 
 \subsection{Test on Nao: using Strong ASAMI}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{out_strong.png}
+\includegraphics[width=0.7\columnwidth]{out_strong.png}
 \caption{Testing of Strong ASAMI on Nao. The observation comes only
 when it's in standing phase - same as Figure~\ref{fig:obs}. The robot
 tries to learn the action model first in the first 1,500 iterations,
@@ -283,12 +292,13 @@ backward to explore the state space.
 Another intended goal is to show that convergence in
 Figure~\ref{fig:obs_strong} should be faster than that in previous
 experiments. Actually, the difference is not significant, at least for
-1-dimensional environment.
+one-dimensional environment.
 
 \section{Discussion and Conclusion}
 \label{sec:dis}
 
 It's possible that learning each discrete action independently would
+<<<<<<< HEAD
 have a better performance. That would be the same metric as
 \cite{LNAI2007-ahmadi}. Though it is interesting to estimate what
 the most likely continuous model is, expressed by polynomial function.
