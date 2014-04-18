@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 \usepackage{latexsym}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -15,28 +15,28 @@
 
 \begin{abstract}
 Robot motion planning and control is essential for robots to navigate
-in the real world.
-Autonomous robots are expected to take actions on their own in order to actively explore an
-environment, rather than being fed by hand-tuned knowledge by a human.
-Stronger and Stone designed an algorithm, called ASAMI, which
-allows robots to learn their environment efficiently. However, it
-assumes access to some knowledge of the effect of the actions even
-though we may not have access to such information in certain domains.
-In this paper, I propose an extension on ASAMI which overcomes these
-drawbacks, and allows the robot to learn the actions as well as the
-environment simultaneously.
+in the real world.  Autonomous robots are expected to take actions in
+order to actively explore an environment, instead of fed by hand-tuned
+knowledge about the environment given by human. This not only saves
+human labor, but also makes the robot more adaptive in dynamic
+environments.  Stronger and Stone designed an algorithm, called ASAMI,
+which allows robots to learn the environment efficiently. However, it assumes
+some knowledge of the effect of the actions, but we may
+not have access to this information in some domains. I proposed an
+extension on ASAMI which makes it overcome such drawback, to learn the
+actions and also the environment simultaneously.
 \end{abstract}
 
 \section{Introduction}
 
-There are two critical models for robot motion---the action model and
-the sensor model. The action model predicts the effect of an action,
+There are two critical models for robot motion---action model and
+sensor model. The action model predicts the effect of an action,
 or formally, $A \rightarrow \Delta S$, where $A$ is the action space
 and $S$ is the location space. The sensor model predicts the
 location given an observation, or formally, $O \rightarrow S$, where
 $O$ is the observation space. Traditionally, these two models are
-fed to the robot by a human. The robot only needs to  ccomplish a
-higher-level goal, by planning and learning (Figure~\ref{fig:robocup}).
+given by human. The robot only needs to do planning or learning for a
+higher-level goal (Figure~\ref{fig:robocup}).
 
 \begin{figure}
 \centering
@@ -45,18 +45,16 @@ higher-level goal, by planning and learning (Figure~\ref{fig:robocup}).
 \label{fig:robocup}
 \end{figure}
 
-However, robots can learn the action model and the 	sensor model
-simultaneously without any prior knowledge. One example of such
-learning is the ASAMI
-algorithm \cite{CSJ06}. In the algorithm, there are two estimates of the current state
+However, robots can be learn action model and sensor model
+simultaneously without any prior knowledge. One example is the ASAMI
+algorithm \cite{CSJ06}. There are two estimates of the current state
 of the robot --- $W_s$, the state estimated by the sensor model, and
 $W_a$, the state estimated by the action model. They are both assumed
-to be polynomial functions, and the robot needs to estimate the parameters
-of each estimate. In a one-dimensional scenario, the robot is required
-to walk back and forth (which clearly requires some knowledge of the
-actions).  In one iteration, the action model is used to update the
-sensor model, and vice versa. They will finally converge in a
-bootstrapping way. This idea is illustrated in
+to be polynomial functions. The robot needs to estimate the parameters
+of them. In one-dimensional scenario, the robot is required to walk
+back and forth (which clearly requires some knowledge of the actions).
+The action model is used to update the sensor model, and also vice
+versa. They will finally converge. This idea is illustrated in
 Figure~\ref{fig:relation}.
 
 \begin{figure}
@@ -73,11 +71,10 @@ In ASAMI, actions are selected randomly
 in the training. However, this can be biased according to the current
 belief.  In this sense, the agent should be able to determine which
 action would lead to the most uncertain results and thus need more
-samples.  It
-only knows the consistency of them, and has no knowledge about the
-correctness of the models. For example, states with a larger
-difference in the action model and the sensor model ($|W_a - W_s|$) should be
-considered inconsistent.  For unobserved state, action pairs can be
+samples.  The agent doesn't know the correctness of the models. It
+only knows the consistency of them. For example, states with larger
+difference in action model and sensor model ($|W_a - W_s|$) should be
+considered as inconsistent.  Unobserved state, action pairs can be
 also assumed to be inconsistent.
 
 The first author of \cite{CSJ06}, Dan Stronger, commented that ``one
@@ -95,39 +92,40 @@ make consistency happen, or the data gathered are too noisy.
 
 Action selection is even necessary in some environment. The
 experiments in \cite{CSJ06} assume that \textit{we} know the effects of
-the actions (going forward, going backward, etc.).
+the actions -- for example, some actions would make the robot go
+forward, and others make it go backward -- while the robot does not
+know.
 So to explore the environment, we make the robot walk forward and
 backward alternatively to explore the state space. However, 
-the actions' effects may be completely unknown.  If the agent still
-chooses the actions uniformly random, then exploration would be
-inefficient.
+actions' effects may be completely unknown.  If the agent still chooses the
+actions uniformly random, then exploration would be inefficient.
 
 For example, we consider one-dimensional walk. Let the world be in the
 range of $[0,n]$. The agent starts at 0, and wants to reach $n$. Let
 the range of velocity be $[-2a, 2a]$ (positive velocities mean going
 forward, and negative ones mean going backward), and in every step the
-agent chooses an action uniformly random. Under these conditions, the expected absolute
-velocity of the walk is $a$. Assume the agent would ``bump into'' the boundary of
+agent chooses an action uniformly random.  Then, the expected absolute
+velocity is $a$. Assume the agent would ``bump into'' the boundary of
 $0$ and stays there if it tries to go backward from position $0$. The
 expected \textit{moving forward} steps needed to take to reach
 position $n$ from $0$ is $\frac{n}{a}$. This forms a \textit{random walk}
 \cite{motwani1995randomized} problem. The expected steps needed to
-take to reach distance $n$ is $O(n^2)$. This implies that if an
+take to reach distance $n$ is $O(n^2)$. This implies that, if an
 agent takes random actions in an unknown domain, it is likely that the
-agent would restrict itself within a small sub-domain.
+agent would restrict itself in a small sub-domain.
 
 \section{Literature Review}
 
 In the perspective of model-adaptive agents \cite{maes1993modeling},
-\textit{action selection} is a critical problem because it
-accelerates the progress towards its goal---consistency between the action
-model and the transition model. This also solves the problem of
+\textit{action selection} is critical problem because it
+accelerates the progress towards its goal---consistency between action
+model and transition model. This also solves the problem of
 \textit{learning from experience}, as the inconsistency is an
-essential piece of information that can be used for further decision-making.
+essential information that can be used for further decision-making.
 
 There is a two-dimensional version of ASAMI discussed in
 \cite{ICRA08-stronger}.  As the action space is larger in higher
-dimensions, biasing on actions instead of random selection on actions
+dimension, biasing on actions instead of random selection on actions
 becomes more essential.
 
 Compared with this proposed method, some similar ideas are discussed
@@ -152,18 +150,18 @@ is true in robot motion. So it's possible to learn the difference of
 the states, when an action is given. This is
 exactly how the task is designed in \cite{ICDL10-hester}. If this is
 not true, so that $S \times A \rightarrow S$ is the best we can
-estimate, this would become more challenging but still possible to be
+estimate, this would become more challenging but still possibly to be
 dealt with. We might know that a certain $(s, a)$ is inconsistent and
 we want to gather more data on it. But our action model might not be
-well-learned, so the reward should be a compromise between the
+well-learned. So the reward should be a compromise between the
 inconsistency of that $(s, a)$ and the cost to reach it.
 
-There are also other related works on learning the action model, but
-they make use of very different approaches. They assume that one model,
+There are also other related works on learning the action model. But
+they're using very different approach. They assume that one model,
 usually the sensor model, is well calibrated. The data are represented
 as either statistics \cite{And_learningand} or instances
-\cite{LNAI2007-ahmadi}. These methods would be further analyzed and
-compared with our approach in Section~\ref{sec:dis}.
+\cite{LNAI2007-ahmadi}. These would be further analyzed and compared
+with our approach in Section~\ref{sec:dis}.
 
 \section{Proposed Algorithm}
 
@@ -197,9 +195,9 @@ compared with our approach in Section~\ref{sec:dis}.
 \end{algorithmic}
 \end{algorithm*}
 
-In this section, I propose an algorithm, named Strong ASAMI,
-which makes the agent choose actions in a computationally cheap way.
-It keeps the essentials of ASAMI, however, Strong ASAMI can be applied
+In this section, I propose an algorithm, which I call it Strong ASAMI,
+that makes the agent choose actions in a computationally cheap way.
+It keeps the essentials of ASAMI\@. However, Strong ASAMI can be applied
 when there is no prior domain knowledge about the action model. The
 idea is that we divide the learning process into two phases. The agent
 learns the actions first and learns the state space later. In the
@@ -218,32 +216,31 @@ added.
 
 In each iteration, \texttt{update} (Line~\ref{asa:update}) is called to update
 the knowledge of the action effects by adding new observations. When
-the robot needs to decide what action to take next,
+the robot needs to decide which is the next action to take,
 \texttt{getAction} (Line~\ref{asa:getAct}) is called.
+
 The action selection strategy in phase 2 (Line~\ref{asa:actSel2}) is
-quite vague. However, this is up to the agent to decide how to plan to traverse
+quite vague. However, this is up to the agent how to plan to traverse
 the state space. Consider a one-dimensional environment, it might want
 to keep trying actions with positive $\Delta state$. When it observes
 no state changes after executing such action, then it tries actions
-with negative $\Delta state$. With this, the robot should have the
+with negative $\Delta state$. Then the robot should have the
 performance of walking forward and backward in the domain.
 
 \section{Experiments}
 
-The setup used in my experiment is the same setup used to evaluate
-ASAMI \cite{CSJ06}. The
-plan for the experimental evaluation is detailed below.
-Firstly, the robot can walk back and forth in a one-dimensional path.
-There is a beacon placed at one end, and the robot is always facing
+The plan for the experimental evaluation is designed in the following
+way, the robot can walk back and forth in a one-dimensional path.
+There is a beacon placed at one end. The robot is always facing
 towards the beacon. The only observation is the height of the beacon.
-The state is given by the distance to the beacon
-(Figure~\ref{fig:env}).  The environment could be noisy - this is
-inherently true when doing experiment on real robots.
+The state is the distance to the beacon (Figure~\ref{fig:env}).
+The environment could be noisy - this is inherently true when doing
+experiment on real robots like Nao.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\columnwidth]{env.png}
-\caption{The observation is the height of the beacon in the experiment.
+\includegraphics[width=0.7\columnwidth]{env.png}
+\caption{The experiment. The observation is the height of the beacon.
 The state is the distance to the beacon. Nao is used instead of Aibo
 shown in this figure. \cite{CSJ06}}
 \label{fig:env}
@@ -252,15 +249,15 @@ shown in this figure. \cite{CSJ06}}
 First, I test ASAMI in a toy domain. I only naively implemented the action
 model and the sensor model. Then, I made ASAMI and Strong ASAMI work on
 Aldebaran Nao robot. Action model and sensor model are both assumed to be cubic
-functions, and we have four parameters to estimate for each model. The
+functions.  We have four parameters to estimate for each model. The
 initial action model $A_0$ is defined to be a constant function,
 $A_0(x) = c$, where c is a small random number. This is used to train
-the state estimated by the action model $w_a$ in the first 100
+the state estimated by the action model, $w_a$, in the first 100
 iterations.
 
-The goal is to have $W_s$ and $W_a$ both converge and consistent with
-the true position, or state. It is possible that they are not
-numerically equal to the state, but they should have the same shape.
+The goal is that $W_s$ and $W_a$ both converge and consistent with
+the true position, or state. It's possible that they are not
+numerically equal to the state. They should have the same shape.
 
 \subsection{Test in Simulator}
 
@@ -309,7 +306,7 @@ per second. It is kidnapped at around 3,500th iteration.}
 \includegraphics[width=0.7\columnwidth]{out_obs.png}
 \caption{Testing of ASAMI on Nao. The observation comes only when it's
 in standing phase. So there is less update in the observation, and
-less noise compared to Figure~\ref{fig:demo}. One iteration of ASAMI
+less noise compared to Figre~\ref{fig:demo}. One iteration of ASAMI
 corresponds to one update in the figure, which corresponding to many
 frames on Nao (I re-scaled the height of beacon, so that they can be
 plotted in a same magnitude).}
@@ -383,8 +380,6 @@ a one-dimensional environment. So expecting improvement on the
 result of ASAMI algorithm may not be realistic. However, Strong ASAMI
 does show its power in the environment where action learning is
 necessary.
-
-\section{Acknowledgement}
 
 %=====================================================================
 \bibliographystyle{plain}
