@@ -194,6 +194,7 @@ compared with our approach in Section~\ref{sec:dis}.
         \State $action \gets$ appropriate action for state exploration \label{asa:actSel2}
     \EndIf
 \EndFunction
+
 \end{algorithmic}
 \end{algorithm*}
 
@@ -220,8 +221,10 @@ In each iteration, \texttt{update} (Line~\ref{asa:update}) is called to update
 the knowledge of the action effects by adding new observations. When
 the robot needs to decide what action to take next,
 \texttt{getAction} (Line~\ref{asa:getAct}) is called.
-The action selection strategy in phase 2 (Line~\ref{asa:actSel2}) is
-quite vague. However, this is up to the agent to decide how to plan to traverse
+The action selection strategy in phase 2 (Line~\ref{asa:actSel2})
+always pick the action that has the largest variance in the observed
+samples. Then it keeps choosing actions to explore the environment.
+This is up to the agent to decide how to plan to traverse
 the state space. Consider a one-dimensional environment, it might want
 to keep trying actions with positive $\Delta state$. When it observes
 no state changes after executing such action, then it tries actions
@@ -364,15 +367,16 @@ one-dimensional environment.
 \section{Discussion and Conclusion}
 \label{sec:dis}
 
-The idea of action trials is very similar to the idea of N-bandit
-problem \cite{vermorel2005multi}. In N-bandit problem, we choose one
-action at each step, with the objective to maximize the overall
-rewards. However, the goal of our problem is to minimize
-the variance of all the actions. To solve this problem, I used a 
-approach of 
-choosing an action with the largest variance at each step. The
-experiments have shown that this approach worked, even though there is
-room for improvement. For example, as the actions are
+The idea of action trials, which are the essential part in Strong
+ASAMI, is very similar to the idea of the multi-armed bandit problem
+\cite{vermorel2005multi}. In the multi-armed bandit problem, we choose
+one arm at each time and obtain a reward, with the objective to
+maximize the overall rewards. However, the goal of our problem should
+be to minimize the variance of all the actions. To solve this problem,
+I used a approach of choosing an action with the largest variance at
+each step. After such action, the variance of that action should
+decrease. The experiments have shown that this approach have worked, even
+though there is room for improvement. For example, as the actions are
 not mutually independent - they are picked up from a continuous space,
 getting one sample of an action can help us know its neighborhood.
 
@@ -391,7 +395,7 @@ effects. This is especially harmful in a noisy environment.
 % The action model and sensor model are comparatively easy to learn for
 % a one-dimensional environment. So expecting improvement on the
 % result of ASAMI algorithm may not be realistic. However,
-In this report, I show that Strong ASAMI shows its power in the
+In this paper, I show that Strong ASAMI has its power in the
 environment where action learning is necessary. This is just for
 one-dimensional environment. So future work can be extending to
 testing in multi-dimensional environments.
