@@ -334,10 +334,8 @@ the standing phase. Note that the x label in Figure~\ref{fig:obs} is
 different from that in Figure~\ref{fig:demo}. In Figure~\ref{fig:demo},
 one iteration of ASAMI is exactly one frame on Nao. Here, one
 iteration of ASAMI takes many frames on Nao (one walking and one
-standing phase).
-
-Clearly, as there are less noise in the observation, the data are more
-accurate. ASAMI has a better performance.
+standing phase). This data is clearly more accurate because there is
+less noise in the observation.
 
 \subsection{Test on Nao: using Strong ASAMI}
 
@@ -373,7 +371,7 @@ ASAMI, is very similar to the idea of the multi-armed bandit problem
 one arm at each time and obtain a reward, with the objective to
 maximize the overall rewards. However, the goal of our problem should
 be to minimize the variance of all the actions. To solve this problem,
-I used a approach of choosing an action with the largest variance at
+I used an approach of choosing an action with the largest variance at
 each step. After such action, the variance of that action should
 decrease. The experiments have shown that this approach have worked, even
 though there is room for improvement. For example, as the actions are
